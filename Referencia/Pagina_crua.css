@@ -23,7 +23,7 @@ h1 span,h2 span{color:var(--brown)}
 .hero-art{position:relative;min-height:400px}
 .sun{position:absolute;right:16%;top:5%;width:75px;height:75px;background:#f4bd4c;box-shadow:0 0 0 11px #f9d77a}
 
-.pixel-cloud{opacity: 0.7;position:fixed;width:115px;height:28px;background:#eaf4eb;box-shadow:25px -18px #eaf4eb,58px 5px #eaf4eb;transform:translateX(var(--cloud-shift, 0px))}
+.pixel-cloud{opacity: 0.4;position:fixed;width:115px;height:28px;background:#eaf4eb;box-shadow:25px -18px #eaf4eb,58px 5px #eaf4eb;transform:translateX(var(--cloud-shift, 0px))}
 
 
 .cloud-one{top:14%;left:9%}
