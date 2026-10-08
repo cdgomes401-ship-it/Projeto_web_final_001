@@ -26,10 +26,12 @@ h1 span,h2 span{color:var(--brown)}
 
 .cloud-one{top:14%;left:9%}
 .cloud-two{left:20%;top:32%;transform:translateX(var(--cloud-shift, 0px)) scale(.7)}
+
+#loginModal{padding: 0;}
 .card-wrap{
     width: 480px;
     max-width: 92vw; /* nunca ultrapassa a largura da tela em telas pequenas */
-    margin: 30px auto 60px;
+    /*margin: 30px auto 60px;*/
     padding: 10px; /* essa "moldura" externa marrom escura simula a borda dupla do print */
     background: linear-gradient(180deg,#5a3d1e,#3d2a15);
     border-radius: 4px;
@@ -71,7 +73,7 @@ h1 span,h2 span{color:var(--brown)}
     font-family:inherit;
     font-size:15px;
     padding: 0 12px;
-    background:#EDE7D3;
+    background:#ffffff;
     border:2px solid #3d2a15;
     color:#4a3d28;
   }
@@ -97,7 +99,7 @@ h1 span,h2 span{color:var(--brown)}
     font-size:17px;
     font-weight:bold;
     letter-spacing:2px;
-    color:#fff;
+    color:#ffffff;
     background: linear-gradient(180deg,#6f9a58,#4c7a3c); /* verde estilo botão do Minecraft */
     border: 2px solid #33502a;
     cursor:pointer;
@@ -113,10 +115,14 @@ h1 span,h2 span{color:var(--brown)}
     60%{ transform: translateX(-5px); }
     80%{ transform: translateX(5px); }
   }
+  #closeModal {position: absolute; right: 5%}
 
-.@media(max-width:800px){.topbar{height:auto;padding:20px 6%;flex-wrap:wrap;gap:18px}nav{order:3;width:100%;justify-content:space-between;gap:10px}
-.hero-art{margin-top:25px}
-.item-grid,.about{grid-template-columns:1fr}
-.about{padding:65px 9%}
-.about-art{margin-bottom:15px}
-footer{padding:23px 7%;flex-direction:column;gap:10px}}
+@media(max-width:800px){
+    .topbar{height:auto;padding:20px 6%;flex-wrap:wrap; gap:18px}
+    nav{order:3;width:100%;justify-content:space-between; gap:10px}
+    .hero-art{margin-top:25px}
+    .item-grid,.about{grid-template-columns:1fr}
+    .about{padding:65px 9%}
+    .about-art{margin-bottom:15px}
+    footer{padding:23px 7%;flex-direction:column;gap:10px}
+}
