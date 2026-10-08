@@ -20,7 +20,8 @@ Imagens para fazer animação
 
 João:
 Formulário para registo
-Texto sobre nós
+--Texto sobre nós - feito--
+ligar a pagina crua html e css com landing page com sobre nos integrado. 
 
 
 Carlos:
