@@ -12,7 +12,7 @@
     <div class="brand"><span class="grass-icon">▰</span> Projeto</div>
     <nav><a href="#inicio">Início</a><a href="#itens">Itens</a><a href="#sobre">Sobre</a></nav>
 
-    <button class="Sing_up" type="button">Sing up </button></nav>
+    <button class="Sing_up" id="openModal" type="button">Sing up </button></nav>
   </header>
  
   <main id="inicio">
@@ -20,7 +20,31 @@
       <div class="pixel-cloud cloud-one"></div>
         <div class="pixel-cloud cloud-two"></div>
     </section>
+  <dialog id="loginModal">
+  <div class="card-wrap">
+   <div class="card" id="card">
+    <h1>USER LOGIN</h1>
 
+    <form id="loginForm">
+      <div class="field">
+        <div class="icon email"><span></span></div>
+        <input type="email" id="email" placeholder="Email ID" required>
+      </div>
+      <div class="field">
+        <div class="icon pass"><span></span></div>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <div class="row-between">
+        <label class="remember"><input type="checkbox"> Remember me</label>
+        <a class="forgot" href="#">Forgot Password?</a>
+      </div>
+      <button type="submit" class="login-btn">LOGIN</button>
+      <button type="button" id="closeModal">X</button>
+    </form>
+  </div>
+</div>
+    </form>
+  </dialog>
     
 </body>
 </html>

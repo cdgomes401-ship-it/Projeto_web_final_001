@@ -26,6 +26,94 @@ h1 span,h2 span{color:var(--brown)}
 
 .cloud-one{top:14%;left:9%}
 .cloud-two{left:20%;top:32%;transform:translateX(var(--cloud-shift, 0px)) scale(.7)}
+.card-wrap{
+    width: 480px;
+    max-width: 92vw; /* nunca ultrapassa a largura da tela em telas pequenas */
+    margin: 30px auto 60px;
+    padding: 10px; /* essa "moldura" externa marrom escura simula a borda dupla do print */
+    background: linear-gradient(180deg,#5a3d1e,#3d2a15);
+    border-radius: 4px;
+  }
+  .card{
+    background:#8B5A2B; /* marrom "tábua de madeira" */
+    border: 6px solid #6b4020;
+    padding: 26px 30px 30px;
+  }
+  .card h1{
+    text-align:center;
+    color:#2b1c0d;
+    font-size:28px;
+    letter-spacing:3px;
+    margin: 0 0 20px;
+  }
+
+  /* cada linha do formulário: ícone + campo de texto lado a lado */
+  .field{
+    display:flex;
+    align-items:stretch; /* ícone e input ficam com a mesma altura */
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .icon{
+    width:42px; height:42px;
+    flex-shrink:0; /* não deixa o ícone encolher se faltar espaço */
+    background:#6b4020;
+    border:2px solid #3d2a15;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* "quadradinho" amarelo dentro do ícone de e-mail */
+  .icon.email span{ width:16px;height:16px;background:#f2d675; }
+  /* forma de cadeado simplificado dentro do ícone de senha, via clip-path */
+  .icon.pass span{ width:16px;height:18px;background:#c98b52; clip-path: polygon(20% 0,80% 0,80% 30%,100% 30%,100% 100%,0 100%,0 30%,20% 30%); }
+
+  .field input{
+    flex:1; /* input ocupa todo o espaço restante da linha */
+    font-family:inherit;
+    font-size:15px;
+    padding: 0 12px;
+    background:#EDE7D3;
+    border:2px solid #3d2a15;
+    color:#4a3d28;
+  }
+  .field input::placeholder{ color:#8b8265; }
+
+  /* linha com "lembrar de mim" à esquerda e "esqueci a senha" à direita */
+  .row-between{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:#2f5c2f;
+    margin-bottom:16px;
+  }
+  .remember{ display:flex; align-items:center; gap:8px; color:#2b1c0d; }
+  .remember input{ width:16px;height:16px; accent-color:#2f5c2f; }
+  .forgot{ font-style:italic; color:#3d6b3d; text-decoration:none; }
+
+  .login-btn{
+    width:100%;
+    padding:14px;
+    font-family:inherit;
+    font-size:17px;
+    font-weight:bold;
+    letter-spacing:2px;
+    color:#fff;
+    background: linear-gradient(180deg,#6f9a58,#4c7a3c); /* verde estilo botão do Minecraft */
+    border: 2px solid #33502a;
+    cursor:pointer;
+  }
+  .login-btn:hover{ filter:brightness(1.08); } /* clareia levemente ao passar o mouse */
+
+  /* tremor do cartão inteiro quando o login falha (feedback visual de erro) */
+  .card.shake{ animation: card-shake 0.4s; }
+  @keyframes card-shake{
+    0%,100%{ transform: translateX(0); }
+    20%{ transform: translateX(-8px); }
+    40%{ transform: translateX(8px); }
+    60%{ transform: translateX(-5px); }
+    80%{ transform: translateX(5px); }
+  }
+
 .@media(max-width:800px){.topbar{height:auto;padding:20px 6%;flex-wrap:wrap;gap:18px}nav{order:3;width:100%;justify-content:space-between;gap:10px}
 .hero-art{margin-top:25px}
 .item-grid,.about{grid-template-columns:1fr}
