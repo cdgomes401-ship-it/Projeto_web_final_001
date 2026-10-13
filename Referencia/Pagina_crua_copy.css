@@ -27,8 +27,31 @@ h1 span,h2 span{color:var(--brown)}
 .cloud-one{top:14%;left:9%}
 .cloud-two{left:20%;top:32%;transform:translateX(var(--cloud-shift, 0px)) scale(.7)}
 
-#loginModal{padding: 0;}
+#loginModal{padding: 10px;}
+#picareta_imag{
+  width:64px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 8px;
+}
+#picareta_imag img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  image-rendering:pixelated;
+  transform-origin:25% 80%;
+}
+#picareta_imag img.swing{animation:pickaxe-swing 0.3s ease-in-out;}
+@keyframes pickaxe-swing{
+  0%,100%{transform:rotate(0deg) translateY(0);}
+  35%{transform:rotate(-24deg) translateY(-3px);}
+  70%{transform:rotate(12deg) translateY(1px);}
+}
+
 .card-wrap{
+    position:relative;
     width: 480px;
     max-width: 92vw; /* nunca ultrapassa a largura da tela em telas pequenas */
     /*margin: 30px auto 60px;*/

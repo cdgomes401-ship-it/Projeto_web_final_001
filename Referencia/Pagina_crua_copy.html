@@ -21,31 +21,32 @@
         <div class="pixel-cloud cloud-two"></div>
     </section>
   <dialog id="loginModal">
-  <figure href = "Wooden_Pickaxe_JE3_BE3.png" ></figure>
-  <div class="card-wrap">
-    <button type="button" id="closeModal">X</button>
-    <div class="card" id="card">
-    <h1>USER LOGIN</h1>
+    <div class="card-wrap">
+        <button type="button" id="closeModal">X</button>
+        <figure id="picareta_imag">
+          <img src="Wooden_Pickaxe_JE3_BE3.png" alt="Picareta de madeira">
+        </figure>
+        <div class="card" id="card">
+          <h1>USER LOGIN</h1>
 
-    <form id="loginForm">
-      <div class="field">
-        <div class="icon email"><span></span></div>
-        <input type="email" id="email" placeholder="Email ID" required>
+          <form id="loginForm">
+            <div class="field">
+              <div class="icon email"><span></span></div>
+              <input type="email" id="email" placeholder="Email ID" required>
+            </div>
+            <div class="field">
+              <div class="icon pass"><span></span></div>
+              <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <div class="row-between">
+              <label class="remember"><input type="checkbox"> Remember me</label>
+              <a class="forgot" href="#">Forgot Password?</a>
+            </div>
+            <button type="submit" class="login-btn">LOGIN</button>
+
+          </form>
+        </div>
       </div>
-      <div class="field">
-        <div class="icon pass"><span></span></div>
-        <input type="password" id="password" placeholder="Password" required>
-      </div>
-      <div class="row-between">
-        <label class="remember"><input type="checkbox"> Remember me</label>
-        <a class="forgot" href="#">Forgot Password?</a>
-      </div>
-      <button type="submit" class="login-btn">LOGIN</button>
-      
-    </form>
-  </div>
-</div>
-    </form>
   </dialog>
     
 </body>

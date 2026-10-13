@@ -28,6 +28,17 @@ const modal = document.getElementById('loginModal');
 const openBtn = document.getElementById('openModal');
 const closeBtn = document.getElementById('closeModal');
 const form = document.getElementById('loginForm');
+const pickaxe = document.querySelector('#picareta_imag img');
+
+form.addEventListener('input', (event) => {
+  if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
+    return;
+  }
+
+  pickaxe.classList.remove('swing');
+  void pickaxe.offsetWidth;
+  pickaxe.classList.add('swing');
+});
 
     // Abre o modal como uma janela sobreposta (com o fundo escuro)
     openBtn.addEventListener('click', () => {
