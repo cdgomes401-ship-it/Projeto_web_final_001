@@ -1,11 +1,12 @@
 -------Por fazer e distribuir:------
 Lista de tarefas
 Relacionar o formulário
-Timer
 Pag_tar/calendário
 Página blog
 Página comunidade 
 Implementação da base de dados
+congruencia no idioma
+criar o express(criar servidor)
 
 
 
@@ -14,7 +15,7 @@ Implementação da base de dados
 
 Arthur:
 Página das tarefas
-
+Timer
 
 
 João:
