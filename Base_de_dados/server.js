@@ -9,6 +9,10 @@ const mysql = require("mysql2/promise");
 // INJETAR VARIAVEIS DE AMBIENTE
 require("dotenv").config();
 
+//Coletar dados do html
+//const input = document.querySelector('task-input');
+
+
 app.use(express.json());
  
 // - CONFIGURAÇÃO MYSQL
@@ -33,7 +37,7 @@ const tarefas = [
     favorita: false,
     tempo_estimado_min: 1,// 'minutos',
     nivel_energia: 0, // '0 = pouca energia, 3 = muita energia'
-    local_da_tarefa: "WC",
+    divisao: "WC",
     data_criacao: "2026-05-18T17:25:00.000Z", 
     data_ultima_vez_feita: "2026-05-18T17:25:00.000Z",
   },
@@ -65,7 +69,7 @@ async function carregarTarefas() {
 
 }
  
-carregarTarefas();
+//carregarTarefas();
  
 
 // --- GET /api/tarefas ---
@@ -175,3 +179,158 @@ app.listen(PORT, async () => {
   }
 });
  
+
+//----------------------------------------
+
+  const CAT_ICON = {
+    "Casa": "🏠",
+    "Autocuidado": "🌸",
+    "Plantas & Bichos": "🪴",
+    "Outros": "📦"
+  };
+
+  let tasks = [
+    { id: 1, text: "Regar as plantas", cat: "Plantas & Bichos", done: false },
+    { id: 2, text: "Alimentar o cachorro", cat: "Plantas & Bichos", done: false },
+    { id: 3, text: "Passar aspirador atrás do sofá", cat: "Casa", done: false },
+    { id: 4, text: "Beber um copo de água", cat: "Autocuidado", done: false },
+    { id: 5, text: "Noite de jogos em família", cat: "Outros", done: false }
+  ];
+
+  let activeCat = "todas";
+  let nextId = 6;
+
+
+
+
+  function render(){
+    const visible = activeCat === "todas" ? tasks : tasks.filter(t => t.cat === activeCat);
+    
+    const listEl = document.getElementById("task-list");
+    const xpBar = document.getElementById("xp-bar");
+    const progressText = document.getElementById("progress-text");
+    const progressPct = document.getElementById("progress-pct");
+    const overlay = document.getElementById("overlay");
+
+
+
+    listEl.innerHTML = "";
+    if(visible.length === 0){
+      listEl.innerHTML = '<p class="empty-msg">Nenhuma tarefa aqui ainda. Adicione uma acima 🌱</p>';
+    }
+
+    visible.forEach(t => {
+      const row = document.createElement("div");
+      row.className = "item-frame" + (t.done ? " done" : "");
+      row.innerHTML = `
+        <div class="check" data-id="${t.id}">${t.done ? "✓" : ""}</div>
+        <div style="flex:1">
+          <div class="task-text">${t.text}</div>
+          <div class="task-cat">${CAT_ICON[t.cat]} ${t.cat}</div>
+        </div>
+        <button class="remove-btn" data-id="${t.id}" aria-label="Remover tarefa">✕</button>
+      `;
+      listEl.appendChild(row);
+    });
+
+    const total = tasks.length;
+    const done = tasks.filter(t => t.done).length;
+    const pct = total === 0 ? 0 : Math.round((done/total)*100);
+
+    progressText.textContent = `${done} de ${total} tarefas concluídas hoje`;
+    progressPct.textContent = `${pct}%`;
+
+    xpBar.innerHTML = "";
+    const segments = 10;
+    const filledSegments = Math.round((pct/100) * segments);
+    for(let i=0; i<segments; i++){
+      const seg = document.createElement("div");
+      seg.className = "xp-seg" + (i < filledSegments ? " filled" : "");
+      xpBar.appendChild(seg);
+    }
+  }
+
+  listEl.addEventListener("click", (e) => {
+    const listEl = document.getElementById("task-list");
+
+
+
+    const checkEl = e.target.closest(".check");
+    const removeEl = e.target.closest(".remove-btn");
+    if(checkEl){
+      const id = Number(checkEl.dataset.id);
+      const t = tasks.find(x => x.id === id);
+      if(t) t.done = !t.done;
+      render();
+    }
+    if(removeEl){
+      const id = Number(removeEl.dataset.id);
+      tasks = tasks.filter(x => x.id !== id);
+      render();
+    }
+  });
+
+  document.getElementById("cat-filters").addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-btn");
+    if(!btn) return;
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    render();
+  });
+
+  document.getElementById("add-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = document.getElementById("task-input");
+    const catInput = document.getElementById("cat-input");
+    const text = input.value.trim();
+    if(!text) return;
+    tasks.push({ id: nextId++, text, cat: catInput.value, done: false });
+    input.value = "";
+    render();
+  });
+
+  const focusTaskText = document.getElementById("focus-task-text");
+  const focusActions = document.getElementById("focus-actions");
+
+  function currentFocusTask(){
+    return tasks.find(t => !t.done);
+  }
+
+  function renderFocus(){
+    const t = currentFocusTask();
+    if(!t){
+      focusTaskText.textContent = "Tudo feito por aqui 🎉";
+      focusActions.style.display = "none";
+    } else {
+      focusTaskText.textContent = `${CAT_ICON[t.cat]} ${t.text}`;
+      focusActions.style.display = "flex";
+    }
+  }
+
+  document.getElementById("focus-btn").addEventListener("click", () => {
+    renderFocus();
+    overlay.classList.remove("hidden");
+  });
+
+  document.getElementById("focus-close").addEventListener("click", () => {
+    overlay.classList.add("hidden");
+    render();
+  });
+
+  document.getElementById("focus-done").addEventListener("click", () => {
+    const t = currentFocusTask();
+    if(t) t.done = true;
+    renderFocus();
+  });
+
+  document.getElementById("focus-skip").addEventListener("click", () => {
+    const t = currentFocusTask();
+    if(t){
+      tasks = tasks.filter(x => x.id !== t.id);
+      tasks.push(t);
+    }
+    renderFocus();
+  });
+
+  render();
