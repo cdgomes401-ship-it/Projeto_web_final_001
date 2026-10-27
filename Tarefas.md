@@ -30,7 +30,7 @@ Timer
 
 João:
 Formulário para registo
-ligar a pagina crua html e css com landing page com sobre nos integrado. 
+
 
 
 Carlos:
@@ -41,6 +41,7 @@ TAREFAS FEITAS---------
 Fazer aparecer um pop-up do login
 Página login/ registo
 Imagens para fazer animação
+-ligar a pagina crua html e css com landing page com sobre nos integrado.  - js
 
 
 

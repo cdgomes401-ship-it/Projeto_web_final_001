@@ -1,186 +1,155 @@
-
-
-/* css novo */
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;500;700;900&display=swap');
-:root{--green:#4d8b27;--dark-green:#173d25;--cream:#f6f0df;--brown:#74452c;--pink:#e58bb5;--ink:#182b20}*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);background:var(--cream);font-family:Roboto,sans-serif}
-.topbar{height:76px;padding:0 7%;display:flex;align-items:center;justify-content:space-between;background:#182f22;color:#fff;border-bottom:5px solid #6d4429}
-.brand{font-family:'Press Start 2P',monospace;font-size:14px;display:flex;align-items:center;gap:11px}
-.grass-icon{color:#8fc345;text-shadow:4px 4px #75452c;font-size:24px}
-nav{display:flex;gap:31px}
-nav a{color:#dfead7;font-size:13px;text-decoration:none}
-nav a:hover{color:#9ec955}
-.Sign_up,.outline-button{border:0;padding:13px 18px;background:#69ad3a;color:white;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;box-shadow:inset -3px -3px #407d14,inset 3px 3px #a4cf5e}
-.Sign_up:hover{background:#8cbd42}
 
+/* ==========================================================================
+   1. VARIÁVEIS E BASE
+   ========================================================================== */
 
-h1,h2,p{margin:0;font-family:'Press Start 2P',monospace;line-height:1.45;letter-spacing:-1px}
-h1,h2{font-size:clamp(31px,4vw,58px);color:var(--dark-green);text-shadow:3px 3px #c3d3a2}
-h1 span,h2 span{color:var(--brown)}
-
-/*clouds*/
-
-.pixel-cloud{
-    opacity: 0,5;
-    position:fixed;
-    width:115px;
-    height:28px;
-    background:#eaf4eb;
-    box-shadow:25px -18px #eaf4eb,58px 5px #eaf4eb;
-    transform:translateX(var(--cloud-shift, 0px))}
-
-
-.cloud-one{top:14%;left:9%}
-.cloud-two{left:20%;top:32%;transform:translateX(var(--cloud-shift, 0px)) scale(.7)}
-
-/*pop up login*/
-
-#loginModal{padding: 10px;}
-#picareta_imag{
-  width:64px;
-  height:64px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 8px;
+:root {
+    --dark-green: #173d25;
+    --cream: #f6f0df;
+    --ink: #182b20;
+    --pixel-font: 'Press Start 2P', monospace;
 }
-#picareta_imag img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  image-rendering:pixelated;
-  transform-origin:25% 80%;
+
+* {
+    box-sizing: border-box;
 }
-#picareta_imag img.swing{animation:pickaxe-swing 0.3s ease-in-out;}
-@keyframes pickaxe-swing{
-  0%,100%{transform:rotate(0deg) translateY(0);}
-  35%{transform:rotate(-24deg) translateY(-3px);}
-  70%{transform:rotate(12deg) translateY(1px);}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--ink);
+    background: var(--cream);
+    font-family: Roboto, sans-serif;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+    font-family: var(--pixel-font);
+    line-height: 1.45;
+    letter-spacing: 1px;
+}
+
+h1,
+h2 {
+    font-size: clamp(31px, 4vw, 58px);
+    color: var(--dark-green);
+    text-shadow: 3px 3px #c3d3a2;
 }
 
 
-.card-wrap{
-    position:relative;
-    width: 480px;
-    max-width: 92vw; /* nunca ultrapassa a largura da tela em telas pequenas */
-    /*margin: 30px auto 60px;*/
-    padding: 10px; /* essa "moldura" externa marrom escura simula a borda dupla do print */
-    background: linear-gradient(180deg,#5a3d1e,#3d2a15);
-    border-radius: 4px;
-  }
-  .card{
-    background:#8B5A2B; /* marrom "tábua de madeira" */
-    border: 6px solid #6b4020;
-    padding: 26px 30px 30px;
-  }
-  .card h1{
-    text-align:center;
-    color:#2b1c0d;
-    font-size:28px;
-    letter-spacing:3px;
-    margin: 0 0 20px;
-  }
+/* ==========================================================================
+   2. CABEÇALHO
+   ========================================================================== */
 
-  /* cada linha do formulário: ícone + campo de texto lado a lado */
-  .field{
-    display:flex;
-    align-items:stretch; /* ícone e input ficam com a mesma altura */
-    gap:10px;
-    margin-bottom:14px;
-  }
-  .icon{
-    width:42px; height:42px;
-    flex-shrink:0; /* não deixa o ícone encolher se faltar espaço */
-    background:#6b4020;
-    border:2px solid #3d2a15;
-    display:flex; align-items:center; justify-content:center;
-  }
-  /* "quadradinho" amarelo dentro do ícone de e-mail */
-  .icon.email span{ width:16px;height:16px;background:#f2d675; }
-  /* forma de cadeado simplificado dentro do ícone de senha, via clip-path */
-  .icon.pass span{ width:16px;height:18px;background:#c98b52; clip-path: polygon(20% 0,80% 0,80% 30%,100% 30%,100% 100%,0 100%,0 30%,20% 30%); }
-
-  .field input{
-    flex:1; /* input ocupa todo o espaço restante da linha */
-    font-family:inherit;
-    font-size:15px;
-    padding: 0 12px;
-    background:#ffffff;
-    border:2px solid #3d2a15;
-    color:#4a3d28;
-  }
-  .field input::placeholder{ color:#8b8265; }
-
-  /* linha com "lembrar de mim" à esquerda e "esqueci a senha" à direita */
-  .row-between{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:13px;
-    color:#2f5c2f;
-    margin-bottom:16px;
-  }
-  .remember{ display:flex; align-items:center; gap:8px; color:#2b1c0d; }
-  .remember input{ width:16px;height:16px; accent-color:#2f5c2f; }
-  .forgot{ font-style:italic; color: black; text-decoration:none; }
-
-  .login-btn{
-    width:100%;
-    padding:14px;
-    font-family:inherit;
-    font-size:17px;
-    font-weight:bold;
-    letter-spacing:2px;
-    color:#ffffff;
-    background: linear-gradient(180deg,#6f9a58,#4c7a3c); /* verde estilo botão do Minecraft */
-    border: 2px solid #33502a;
-    cursor:pointer;
-  }
-  .login-btn:hover{ filter:brightness(1.08); } /* clareia levemente ao passar o mouse */
-
-  /* tremor do cartão inteiro quando o login falha (feedback visual de erro) */
-  .card.shake{ animation: card-shake 0.4s; }
-  @keyframes card-shake{
-    0%,100%{ transform: translateX(0); }
-    20%{ transform: translateX(-8px); }
-    40%{ transform: translateX(8px); }
-    60%{ transform: translateX(-5px); }
-    80%{ transform: translateX(5px); }
-  }
-  #closeModal {position: absolute; right: 5%}
-
-  /*adaptabilidade*/
-
-@media(max-width:800px){
-    .topbar{height:auto;padding:20px 6%;flex-wrap:wrap; gap:18px}
-    nav{order:3;width:100%;justify-content:space-between; gap:10px}
-    .item-grid,.about{grid-template-columns:1fr}
-    .about{padding:65px 9%}
-    .about-art{margin-bottom:15px}
-    footer{padding:23px 7%;flex-direction:column;gap:10px}
+.topbar {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #182f22;
+    color: #fff;
+    border-bottom: 5px solid #6d4429;
 }
 
-/* hero feito por mim*/
+.brand {
+    font-family: var(--pixel-font);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.grass-icon {
+    color: #8fc345;
+    text-shadow: 4px 4px #75452c;
+    font-size: 24px;
+}
+
+nav {
+    display: flex;
+    gap: 31px;
+}
+
+nav a {
+    color: #dfead7;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #9ec955;
+}
+
+.Sign_up {
+    border: 0;
+    padding: 13px 18px;
+    background: #69ad3a;
+    color: white;
+    font-family: var(--pixel-font);
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: inset -3px -3px #407d14, inset 3px 3px #a4cf5e;
+}
+
+.Sign_up:hover {
+    background: #8cbd42;
+}
+
+
+/* ==========================================================================
+   3. NUVENS (fundo)
+   ========================================================================== */
+
+.pixel-cloud {
+    opacity: 0.5;
+    position: fixed;
+    z-index: -1; /* atrás de todo o conteúdo */
+    pointer-events: none; /* não bloqueia cliques */
+    width: 115px;
+    height: 28px;
+    background: #eaf4eb;
+    box-shadow: 25px -18px #eaf4eb, 58px 5px #eaf4eb;
+    transform: translateX(var(--cloud-shift, 0px));
+}
+
+.cloud-one {
+    top: 14%;
+    left: 9%;
+}
+
+.cloud-two {
+    left: 20%;
+    top: 32%;
+    transform: translateX(var(--cloud-shift, 0px)) scale(.7);
+}
+
+
+/* ==========================================================================
+   4. HERO
+   ========================================================================== */
+
 .hero {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     gap: 2rem;
-    padding: 2rem 1.5rem;
-    position: relative;
+    padding: 5rem 1.5rem;
+}
+
+.hero-text {
+    flex: 1;
 }
 
 .hero-text h1 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.5rem;
     line-height: 1.4;
     margin-bottom: 1.5rem;
-}
-
-.hero-text p {
-    font-size: 1rem;
 }
 
 .highlight {
@@ -189,6 +158,279 @@ h1 span,h2 span{color:var(--brown)}
 }
 
 #imagemPrincipal {
-    width: 70%;
-    max-width: 300px;
+    flex: 0 0 40%;
+    max-width: 450px;
+    margin-right: 5%;
+}
+
+#imagemPrincipal img {
+    display: block;
+    width: 100%;
+}
+
+
+/* ==========================================================================
+   5. SOBRE NÓS
+   ========================================================================== */
+
+#sobreNos {
+    padding: 10rem 2rem;
+}
+
+
+/* ==========================================================================
+   6. POP UP DE LOGIN
+   ========================================================================== */
+
+#loginModal {
+    padding: 10px;
+}
+
+#closeModal {
+    position: absolute;
+    right: 5%;
+}
+
+/* ---------- picareta ---------- */
+
+#picareta_imag {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+}
+
+#picareta_imag img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    transform-origin: 25% 80%;
+}
+
+#picareta_imag img.swing {
+    animation: pickaxe-swing 0.3s ease-in-out;
+}
+
+@keyframes pickaxe-swing {
+    0%,
+    100% {
+        transform: rotate(0deg) translateY(0);
+    }
+
+    35% {
+        transform: rotate(-24deg) translateY(-3px);
+    }
+
+    70% {
+        transform: rotate(12deg) translateY(1px);
+    }
+}
+
+/* ---------- moldura e cartão ---------- */
+
+.card-wrap {
+    position: relative;
+    width: 480px;
+    max-width: 92vw; /* nunca ultrapassa a largura do ecrã */
+    padding: 10px; /* moldura externa castanha escura */
+    background: linear-gradient(180deg, #5a3d1e, #3d2a15);
+    border-radius: 4px;
+}
+
+.card {
+    background: #8B5A2B; /* castanho "tábua de madeira" */
+    border: 6px solid #6b4020;
+    padding: 26px 30px 30px;
+}
+
+.card h1 {
+    text-align: center;
+    color: #2b1c0d;
+    font-size: 28px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+/* tremor do cartão quando o login falha (ainda não usado no JS) */
+.card.shake {
+    animation: card-shake 0.4s;
+}
+
+@keyframes card-shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-8px);
+    }
+
+    40% {
+        transform: translateX(8px);
+    }
+
+    60% {
+        transform: translateX(-5px);
+    }
+
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* ---------- campos do formulário: ícone + input lado a lado ---------- */
+
+.field {
+    display: flex;
+    align-items: stretch; /* ícone e input com a mesma altura */
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.field input {
+    flex: 1; /* ocupa o espaço restante */
+    font-family: inherit;
+    font-size: 15px;
+    padding: 0 12px;
+    background: #ffffff;
+    border: 2px solid #3d2a15;
+    color: #4a3d28;
+}
+
+.field input::placeholder {
+    color: #8b8265;
+}
+
+.icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    background: #6b4020;
+    border: 2px solid #3d2a15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon.email span {
+    width: 16px;
+    height: 16px;
+    background: #f2d675;
+}
+
+/* cadeado simplificado via clip-path */
+.icon.pass span {
+    width: 16px;
+    height: 18px;
+    background: #c98b52;
+    clip-path: polygon(20% 0, 80% 0, 80% 30%, 100% 30%, 100% 100%, 0 100%, 0 30%, 20% 30%);
+}
+
+/* ---------- "lembrar-me" à esquerda, "esqueci a password" à direita ---------- */
+
+.row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2b1c0d;
+}
+
+.remember input {
+    width: 16px;
+    height: 16px;
+    accent-color: #2f5c2f;
+}
+
+.forgot {
+    font-style: italic;
+    color: black;
+    text-decoration: none;
+}
+
+/* ---------- botão de submit ---------- */
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #ffffff;
+    background: linear-gradient(180deg, #6f9a58, #4c7a3c); /* verde estilo Minecraft */
+    border: 2px solid #33502a;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    filter: brightness(1.08);
+}
+
+/* ---------- texto "registe-se aqui" ---------- */
+
+.register-text {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.8;
+    color: white;
+}
+
+.linkRegisto {
+    color: #f2d675;
+    text-decoration: underline;
+}
+
+.linkRegisto:hover {
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   7. ADAPTABILIDADE (media queries) — sempre no fim
+   ========================================================================== */
+
+@media (max-width: 800px) {
+
+    .topbar {
+        height: auto;
+        padding: 20px 6%;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
+    nav {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .hero {
+        flex-direction: column;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    #imagemPrincipal {
+        flex: none;
+        width: 70%;
+    }
+
+    footer {
+        padding: 23px 7%;
+    }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Goblin - Registo</title>
+
+    <link rel="stylesheet" href="registo.css">
+    <script src="registo.js" defer></script>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="brand"><span class="grass-icon">▰</span> House Goblin</div>
+        <nav>
+            <a href="LandingPage/landingPage.html#home">Home</a>
+            <a href="LandingPage/landingPage.html#dicas">Dicas</a>
+            <a href="LandingPage/landingPage.html#sobreNos">Sobre nós</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="registo">
+            <div class="card-wrap">
+                <div class="card">
+                    <h1>REGISTO UTILIZADOR</h1>
+
+                    <form id="formularioRegisto">
+                        <div class="field">
+                            <div class="icon user"><span></span></div>
+                            <input type="text" id="username" placeholder="Nome de utilizador" aria-label="Nome de utilizador" autocomplete="username" required>
+                        </div>
+
+                        <div class="field">
+                            <div class="icon email"><span></span></div>
+                            <input type="email" id="email" placeholder="Email ID" aria-label="Email" autocomplete="email" required>
+                        </div>
+
+                        <div class="field">
+                            <div class="icon pass"><span></span></div>
+                            <input type="password" id="password" placeholder="Password" aria-label="Password" autocomplete="new-password" required>
+                        </div>
+
+                        <div class="field">
+                            <div class="icon pass"><span></span></div>
+                            <input type="password" id="confirmPassword" placeholder="Confirmar password" aria-label="Confirmar password" autocomplete="new-password" required>
+                        </div>
+
+                        <p id="passwordError" class="form-error" hidden>As passwords não coincidem.</p>
+
+                        <button type="submit" class="login-btn">REGISTAR</button>
+                    </form>
+
+                    <p class="register-text">
+                        Já tem conta? Entre
+                        <a class="linkRegisto" href="LandingPage/landingPage.html">aqui</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div></div>
+    </footer>
+
+</body>
+</html>
