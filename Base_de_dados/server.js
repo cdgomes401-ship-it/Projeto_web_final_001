@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 app.get("/api/tarefas", async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, nome_tarefa AS text, categoria AS cat, concluida AS done FROM tarefas ORDER BY id"
+      "SELECT id, tarefa AS text, divisao AS cat, nao_concluido AS done FROM tarefas ORDER BY id"
     );
     res.json(rows.map((task) => ({ ...task, done: Boolean(task.done) })));
   } catch (error) {
@@ -49,7 +49,7 @@ app.get("/api/tarefas", async (req, res) => {
 app.get("/api/tarefas/categorias", async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      "SELECT DISTINCT categoria FROM tarefas WHERE categoria IS NOT NULL AND categoria <> '' ORDER BY categoria"
+      "SELECT DISTINCT divisao FROM tarefas WHERE divisao IS NOT NULL AND divisao <> '' ORDER BY divisao"
     );
     res.json(rows.map((row) => row.categoria));
   } catch (error) {

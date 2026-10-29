@@ -2,7 +2,9 @@ const CAT_ICON = {
   Casa: "🏠",
   Autocuidado: "🌸",
   "Plantas & Bichos": "🪴",
-  Outros: "📦"
+  Outros: "📦",
+  WC : "🏠",
+  "Sala de estar" : "🏠"
 };
 
 let tasks = [];
