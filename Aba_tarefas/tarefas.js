@@ -6,6 +6,7 @@ const CAT_ICON = {
 };
 
 let tasks = [];
+let categories = [];
 let activeCat = "todas";
 let errorMessage = "";
 
@@ -25,7 +26,15 @@ async function requestTasks(path = "", options = {}) {
 
 async function loadTasks() {
   try {
-    tasks = await requestTasks();
+    const [loadedTasks, loadedCategories] = await Promise.all([
+      requestTasks(),
+      requestTasks("/categorias")
+    ]);
+    tasks = loadedTasks;
+    categories = loadedCategories;
+    if (activeCat !== "todas" && !categories.includes(activeCat)) {
+      activeCat = "todas";
+    }
     errorMessage = "";
   } catch (error) {
     errorMessage = error.message;
@@ -39,9 +48,40 @@ function render() {
     ? tasks
     : tasks.filter((task) => task.cat === activeCat);
   const listEl = document.getElementById("task-list");
+  const filtersEl = document.getElementById("cat-filters");
+  const categoryInput = document.getElementById("cat-input");
   const xpBar = document.getElementById("xp-bar");
   const progressText = document.getElementById("progress-text");
   const progressPct = document.getElementById("progress-pct");
+
+  filtersEl.replaceChildren();
+  const allButton = document.createElement("button");
+  allButton.type = "button";
+  allButton.className = `cat-btn${activeCat === "todas" ? " active" : ""}`;
+  allButton.dataset.cat = "todas";
+  allButton.textContent = "Todas";
+  filtersEl.appendChild(allButton);
+  categories.forEach((categoryName) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `cat-btn${activeCat === categoryName ? " active" : ""}`;
+    button.dataset.cat = categoryName;
+    button.textContent = `${CAT_ICON[categoryName] || "📦"} ${categoryName}`;
+    filtersEl.appendChild(button);
+  });
+
+  const selectedCategory = categoryInput.value;
+  categoryInput.replaceChildren();
+  const availableCategories = categories.length > 0 ? categories : ["Outros"];
+  availableCategories.forEach((categoryName) => {
+    const option = document.createElement("option");
+    option.value = categoryName;
+    option.textContent = `${CAT_ICON[categoryName] || "📦"} ${categoryName}`;
+    categoryInput.appendChild(option);
+  });
+  if (availableCategories.includes(selectedCategory)) {
+    categoryInput.value = selectedCategory;
+  }
 
   listEl.replaceChildren();
 
@@ -79,7 +119,7 @@ function render() {
 
     const category = document.createElement("div");
     category.className = "task-cat";
-    category.textContent = `${CAT_ICON[task.cat] || CAT_ICON.Outros} ${task.cat}`;
+    category.textContent = `${CAT_ICON[task.cat] || "📦"} ${task.cat}`;
 
     const remove = document.createElement("button");
     remove.type = "button";
@@ -135,8 +175,6 @@ document.getElementById("cat-filters").addEventListener("click", (event) => {
   const button = event.target.closest(".cat-btn");
   if (!button) return;
 
-  document.querySelectorAll(".cat-btn").forEach((item) => item.classList.remove("active"));
-  button.classList.add("active");
   activeCat = button.dataset.cat;
   render();
 });
@@ -177,7 +215,7 @@ function renderFocus() {
     return;
   }
 
-  focusTaskText.textContent = `${CAT_ICON[task.cat] || CAT_ICON.Outros} ${task.text}`;
+  focusTaskText.textContent = `${CAT_ICON[task.cat] || "📦"} ${task.text}`;
   focusActions.style.display = "flex";
 }
 

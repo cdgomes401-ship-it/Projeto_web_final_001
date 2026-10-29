@@ -46,15 +46,34 @@ app.get("/api/tarefas", async (req, res) => {
   }
 });
 
+app.get("/api/tarefas/categorias", async (req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      "SELECT DISTINCT categoria FROM tarefas WHERE categoria IS NOT NULL AND categoria <> '' ORDER BY categoria"
+    );
+    res.json(rows.map((row) => row.categoria));
+  } catch (error) {
+    console.error("Erro ao carregar categorias:", error.message);
+    res.status(500).json({ msg: "Não foi possível carregar as categorias." });
+  }
+});
+
 app.post("/api/tarefas", async (req, res) => {
   const { text, cat } = req.body;
-  const categories = ["Casa", "Autocuidado", "Plantas & Bichos", "Outros"];
 
-  if (typeof text !== "string" || !text.trim() || !categories.includes(cat)) {
+  if (typeof text !== "string" || !text.trim() || typeof cat !== "string" || !cat.trim()) {
     return res.status(400).json({ msg: "Indique uma tarefa e uma categoria válidas." });
   }
 
   try {
+    const [categoryRows] = await pool.execute(
+      "SELECT DISTINCT categoria FROM tarefas WHERE categoria IS NOT NULL AND categoria <> ''"
+    );
+    const categories = categoryRows.map((row) => row.categoria);
+    if (!categories.includes(cat) && !(categories.length === 0 && cat === "Outros")) {
+      return res.status(400).json({ msg: "Selecione uma categoria disponível." });
+    }
+
     const [result] = await pool.execute(
       "INSERT INTO tarefas (nome_tarefa, categoria) VALUES (?, ?)",
       [text.trim(), cat]
@@ -128,16 +147,4 @@ start().catch(async (error) => {
   console.error("Não foi possível iniciar a aplicação ou ligar à base de dados:", error.message);
   await pool.end();
   process.exitCode = 1;
-});
-
-
-
-app.listen(PORT, async () => {
-  console.log(`Servidor a rolar na porta ${PORT}`);
-  try {
-    await pool.execute("SELECT 1");
-    console.log("Ligação ao MYSQL efetuada com sucesso");
-  } catch (error) {
-    console.log(error);
-  }
 });

@@ -26,22 +26,11 @@
     <div class="xp-bar" id="xp-bar"></div>
   </div>
 
-  <div class="toolbar" id="cat-filters">
-    <button class="cat-btn active" data-cat="todas">Todas</button>
-    <button class="cat-btn" data-cat="Casa">🏠 Casa</button>
-    <button class="cat-btn" data-cat="Autocuidado">🌸 Autocuidado</button>
-    <button class="cat-btn" data-cat="Plantas & Bichos">🪴 Plantas & Bichos</button>
-    <button class="cat-btn" data-cat="Outros">📦 Outros</button>
-  </div>
+  <div class="toolbar" id="cat-filters" aria-label="Filtrar tarefas por categoria"></div>
 
   <form class="add-row" id="add-form">
     <input type="text" id="task-input" placeholder="Nova tarefa, ex: regar as plantas" required>
-    <select id="cat-input">
-      <option value="Casa">🏠 Casa</option>
-      <option value="Autocuidado">🌸 Autocuidado</option>
-      <option value="Plantas & Bichos">🪴 Plantas & Bichos</option>
-      <option value="Outros">📦 Outros</option>
-    </select>
+    <select id="cat-input" aria-label="Categoria da tarefa" required></select>
     <button type="submit">Add</button>
   </form>
 
