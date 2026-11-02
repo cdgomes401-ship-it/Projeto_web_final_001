@@ -1,44 +1,114 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Timer</title>
-<style>
-body { font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; gap: 16px; }
-#t { font-size: 20vmin; font-variant-numeric: tabular-nums; }
-input, button { font-size: 1.2rem; padding: 8px 14px; }
-input { width: 5em; text-align: center; }
-</style>
-</head>
-<body>
-<div id="t">05:00</div>
-<div>
-  <input id="m" type="number" value="5" min="1"> min
-  <button onclick="start()">Iniciar</button>
-  <button onclick="reset()">Parar</button>
+
+<button onclick="abrirTimer()">Abrir timer</button>
+
+<!-- Pop-up do timer -->
+<div id="timer-popup" class="timer-fundo">
+  <div class="timer-caixa">
+    <button class="timer-fechar" onclick="fecharTimer()" aria-label="Fechar">&times;</button>
+
+    <div id="timer-t">05:00</div>
+    <div class="timer-controles">
+      <input id="timer-m" type="number" value="5" min="1"> min
+      <button onclick="timerStart()">Iniciar</button>
+      <button onclick="timerReset()">Parar</button>
+    </div>
+  </div>
 </div>
+
+<style>
+  .timer-fundo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+  
+  }
+  .timer-fundo.ativo { display: flex; }
+
+  .timer-caixa {
+    position: relative;
+    background: #0c0c0c;
+    padding: 48px 32px 32px;
+    border-radius: 12px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    font-family: system-ui, sans-serif;
+  
+  }
+
+  .timer-fechar {
+    position: absolute;
+    top: 8px;
+    left: 8px;               /* canto superior esquerdo */
+    background: none;
+    border: none;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 8px;
+  }
+
+  #timer-t {
+    font-size: clamp(3rem, 15vmin, 7rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-controles input,
+  .timer-controles button { font-size: 1.2rem; padding: 8px 14px; }
+  .timer-controles input { width: 5em; text-align: center; }
+</style>
+
 <script>
-let id, resto;
-const t = document.getElementById('t');
-function mostrar() {
-  t.textContent = String(Math.floor(resto/60)).padStart(2,'0') + ':' + String(resto%60).padStart(2,'0');
-}
-function start() {
-  clearInterval(id);
-  resto = (+document.getElementById('m').value || 1) * 60;
-  mostrar();
-  id = setInterval(() => {
-    resto--; mostrar();
-    if (resto <= 0) { clearInterval(id); t.textContent = 'Acabou!'; }
-  }, 1000);
-}
-function reset() {
-  clearInterval(id);
-  resto = (+document.getElementById('m').value || 1) * 60;
-  mostrar();
-}
-reset();
+  let timerId, timerResto;
+  const timerT = document.getElementById('timer-t');
+  const timerPopup = document.getElementById('timer-popup');
+
+  function timerMostrar() {
+    timerT.textContent =
+      String(Math.floor(timerResto / 60)).padStart(2, '0') + ':' +
+      String(timerResto % 60).padStart(2, '0');
+  }
+
+  function timerStart() {
+    clearInterval(timerId);
+    timerResto = (+document.getElementById('timer-m').value || 1) * 60;
+    timerMostrar();
+    timerId = setInterval(() => {
+      timerResto--;
+      timerMostrar();
+      if (timerResto <= 0) {
+        clearInterval(timerId);
+        timerT.textContent = 'Acabou!';
+      }
+    }, 1000);
+  }
+
+  function timerReset() {
+    clearInterval(timerId);
+    timerResto = (+document.getElementById('timer-m').value || 1) * 60;
+    timerMostrar();
+  }
+
+  function abrirTimer()  { timerPopup.classList.add('ativo'); }
+  function fecharTimer() { timerPopup.classList.remove('ativo'); }
+
+  // Fecha ao clicar fora da caixa
+  timerPopup.addEventListener('click', (e) => {
+    if (e.target === timerPopup) fecharTimer();
+  });
+
+  // Fecha com a tecla Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') fecharTimer();
+  });
+
+  timerReset();
 </script>
-</body>
-</html>
