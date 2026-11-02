@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timer</title>
+<style>
+body { font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; gap: 16px; }
+#t { font-size: 20vmin; font-variant-numeric: tabular-nums; }
+input, button { font-size: 1.2rem; padding: 8px 14px; }
+input { width: 5em; text-align: center; }
+</style>
+</head>
+<body>
+<div id="t">05:00</div>
+<div>
+  <input id="m" type="number" value="5" min="1"> min
+  <button onclick="start()">Iniciar</button>
+  <button onclick="reset()">Parar</button>
+</div>
+<script>
+let id, resto;
+const t = document.getElementById('t');
+function mostrar() {
+  t.textContent = String(Math.floor(resto/60)).padStart(2,'0') + ':' + String(resto%60).padStart(2,'0');
+}
+function start() {
+  clearInterval(id);
+  resto = (+document.getElementById('m').value || 1) * 60;
+  mostrar();
+  id = setInterval(() => {
+    resto--; mostrar();
+    if (resto <= 0) { clearInterval(id); t.textContent = 'Acabou!'; }
+  }, 1000);
+}
+function reset() {
+  clearInterval(id);
+  resto = (+document.getElementById('m').value || 1) * 60;
+  mostrar();
+}
+reset();
+</script>
+</body>
+</html>
