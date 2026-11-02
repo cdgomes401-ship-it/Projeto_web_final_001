@@ -22,6 +22,20 @@
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     line-height: 1.5;
   }
+/* ==========================================================================
+   2. CABEÇALHO
+   ========================================================================== */
+
+.topbar {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #182f22;
+    color: #fff;
+    border-bottom: 5px solid #6d4429;
+}
 
   header{
     background: var(--sage);
@@ -33,7 +47,7 @@
   .logo{
     font-family: 'Press Start 2P', monospace;
     font-size: 15px;
-    color: var(--ink);
+    color: #fff;/*var(--ink);*/
     letter-spacing: 1px;
     margin: 0 0 10px;
   }
@@ -50,6 +64,12 @@
     margin: -22px auto 60px;
     padding: 0 18px;
   }
+
+  .grass-icon {
+    color: #8fc345;
+    text-shadow: 4px 4px #75452c;
+    font-size: 24px;
+}
 
   .progress-panel{
     background: var(--panel);
