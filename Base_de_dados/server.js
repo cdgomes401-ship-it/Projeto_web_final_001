@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 app.get("/api/tarefas", async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, tarefa AS text, divisao AS cat, nao_concluido AS done FROM tarefas ORDER BY id"
+      "SELECT id, tarefa AS text, divisao AS cat, concluido AS done FROM tarefas ORDER BY id"
     );
     res.json(rows.map((task) => ({ ...task, done: Boolean(task.done) })));
   } catch (error) {
@@ -51,7 +51,7 @@ app.get("/api/tarefas/categorias", async (req, res) => {
     const [rows] = await pool.execute(
       "SELECT DISTINCT divisao FROM tarefas WHERE divisao IS NOT NULL AND divisao <> '' ORDER BY divisao"
     );
-    res.json(rows.map((row) => row.categoria));
+    res.json(rows.map((row) => row.divisao));
   } catch (error) {
     console.error("Erro ao carregar categorias:", error.message);
     res.status(500).json({ msg: "Não foi possível carregar as categorias." });
@@ -67,15 +67,15 @@ app.post("/api/tarefas", async (req, res) => {
 
   try {
     const [categoryRows] = await pool.execute(
-      "SELECT DISTINCT categoria FROM tarefas WHERE categoria IS NOT NULL AND categoria <> ''"
+      "SELECT DISTINCT divisao FROM tarefas WHERE divisao IS NOT NULL AND divisao <> ''"
     );
-    const categories = categoryRows.map((row) => row.categoria);
+    const categories = categoryRows.map((row) => row.divisao);
     if (!categories.includes(cat) && !(categories.length === 0 && cat === "Outros")) {
       return res.status(400).json({ msg: "Selecione uma categoria disponível." });
     }
 
     const [result] = await pool.execute(
-      "INSERT INTO tarefas (nome_tarefa, categoria) VALUES (?, ?)",
+      "INSERT INTO tarefas (tarefa, divisao) VALUES (?, ?)",
       [text.trim(), cat]
     );
     res.status(201).json({ id: result.insertId, text: text.trim(), cat, done: false });
@@ -95,7 +95,7 @@ app.patch("/api/tarefas/:id", async (req, res) => {
 
   try {
     const [result] = await pool.execute(
-      "UPDATE tarefas SET concluida = ? WHERE id = ?",
+      "UPDATE tarefas SET concluido = ? WHERE id = ?",
       [done, id]
     );
     if (result.affectedRows === 0) {
@@ -130,11 +130,15 @@ app.delete("/api/tarefas/:id", async (req, res) => {
 async function start() {
   await pool.execute(`
     CREATE TABLE IF NOT EXISTS tarefas (
-      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      nome_tarefa VARCHAR(255) NOT NULL,
-      categoria VARCHAR(40) NOT NULL DEFAULT 'Outros',
-      concluida BOOLEAN NOT NULL DEFAULT FALSE,
-      data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      divisao VARCHAR(50) NOT NULL COMMENT 'divisão da casa a que pertence a tarefa',
+      tarefa VARCHAR(255) NOT NULL,
+      frequencia VARCHAR(50) NOT NULL,
+      prioridade INT NOT NULL COMMENT '1 = mais alta, 4 = normal',
+      tempo_estimado_min INT NOT NULL COMMENT 'minutos',
+      nivel_energia INT NOT NULL COMMENT '0 = pouca energia, 3 = muita energia',
+      concluido BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'FALSE = por concluir, TRUE = concluída',
+      ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)'
     )
   `);
 

@@ -2,13 +2,13 @@
 -- Base de dados: tarefas
 -- ============================================
 
-DROP DATABASE IF EXISTS tarefas;
+DROP DATABASE IF EXISTS bd_tarefas;
 
-CREATE DATABASE IF NOT EXISTS tarefas
+CREATE DATABASE IF NOT EXISTS bd_tarefas
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
-USE tarefas;
+USE bd_tarefas;
 
 -- Tabela única: a divisão da casa passa a ser uma coluna
 CREATE TABLE IF NOT EXISTS tarefas (
@@ -19,12 +19,12 @@ CREATE TABLE IF NOT EXISTS tarefas (
     prioridade INT NOT NULL COMMENT '1 = mais alta, 4 = normal',
     tempo_estimado_min INT NOT NULL COMMENT 'minutos',
     nivel_energia INT NOT NULL COMMENT '0 = pouca energia, 3 = muita energia',
-    nao_concluido BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'TRUE = por concluir, FALSE = concluída',
+    concluido BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'FALSE = por concluir, TRUE = concluída',
     ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)'
 );
 
 -- WC
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, TRUE, NULL),
 ('WC', 'Lavar chão', 'Semanal', 1, 8, 2, TRUE, NULL),
 ('WC', 'Lavar louças de casa de banho', 'Semanal', 1, 12, 2, TRUE, NULL),
@@ -46,7 +46,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('WC', 'Lavar cortina de banho', 'Mensal', 2, 5, 1, TRUE, NULL);
 
 -- Sala de estar
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Sala de estar', 'Arrumar objetos soltos', 'Diária', 2, 5, 1, TRUE, NULL),
 ('Sala de estar', 'Aspirar o chão e os tapetes', 'Semanal', 3, 20, 3, TRUE, NULL),
 ('Sala de estar', 'Lavar o chão', 'Semanal', 2, 20, 3, TRUE, NULL),
@@ -59,7 +59,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Sala de estar', 'Lavar as cortinas', 'Semestral', 4, 30, 2, TRUE, NULL);
 
 -- Sala de jantar
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Sala de jantar', 'Limpar o pó do aparador e dos móveis', 'Semanal', 3, 10, 1, TRUE, NULL),
 ('Sala de jantar', 'Lavar o chão', 'Semanal', 2, 20, 2, TRUE, NULL),
 ('Sala de jantar', 'Limpar as cadeiras (encostos e estofos)', 'Mensal', 3, 15, 2, TRUE, NULL),
@@ -68,7 +68,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Sala de jantar', 'Lavar as cortinas', 'Semestral', 4, 30, 0, TRUE, NULL);
 
 -- Cozinha
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Cozinha', 'Despejar o lixo e a reciclagem', 'Diária', 1, 5, 0, TRUE, NULL),
 ('Cozinha', 'Aspirar o chão', 'Semanal', 1, 15, 2, TRUE, NULL),
 ('Cozinha', 'Lavar o chão', 'Semanal', 1, 15, 2, TRUE, NULL),
@@ -82,7 +82,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Cozinha', 'Limpar os armários por dentro', 'Semestral', 4, 45, 2, TRUE, NULL);
 
 -- Quarto
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Quarto', 'Mudar os lençóis', 'Semanal', 1, 10, 1, TRUE, NULL),
 ('Quarto', 'Aspirar o chão', 'Semanal', 2, 10, 2, TRUE, NULL),
 ('Quarto', 'Limpar o pó dos móveis e das mesas de cabeceira', 'Semanal', 3, 10, 1, TRUE, NULL),
@@ -92,7 +92,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Quarto', 'Lavar almofadas e edredão', 'Semestral', 3, 20, 1, TRUE, NULL);
 
 -- Escritório
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Escritório', 'Limpar o pó da secretária e do monitor', 'Semanal', 3, 10, 1, TRUE, NULL),
 ('Escritório', 'Limpar o teclado e o rato', 'Semanal', 3, 5, 0, TRUE, NULL),
 ('Escritório', 'Esvaziar lixo', 'Semanal', 3, 5, 0, TRUE, NULL),
@@ -103,7 +103,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Escritório', 'Triar documentos antigos', 'Anual', 4, 60, 2, TRUE, NULL);
 
 -- Lavandaria
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Lavandaria', 'Aspirar o chão', 'Semanal', 3, 3, 2, TRUE, NULL),
 ('Lavandaria', 'Lavar o chão', 'Semanal', 3, 5, 2, TRUE, NULL),
 ('Lavandaria', 'Limpar as superfícies', 'Semanal', 3, 2, 1, TRUE, NULL),
@@ -114,7 +114,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Lavandaria', 'Limpar atrás e debaixo das máquinas', 'Semestral', 4, 20, 2, TRUE, NULL);
 
 -- Dispensa
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Dispensa', 'Verificar as datas de validade dos alimentos', 'Trimestral', 1, 15, 0, TRUE, NULL),
 ('Dispensa', 'Organizar e repor as prateleiras', 'Mensal', 3, 30, 1, TRUE, NULL),
 ('Dispensa', 'Lavar o chão', 'Mensal', 3, 15, 2, TRUE, NULL),
@@ -122,7 +122,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 
 
 -- Garagem
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Garagem', 'Varrer o chão da garagem', 'Semanal', 3, 15, 1, TRUE, NULL),
 ('Garagem', 'Arrumar bicicletas e equipamento desportivo', 'Semanal', 4, 15, 1, TRUE, NULL),
 ('Garagem', 'Verificar a pressão dos pneus (carro e bicicletas)', 'Mensal', 1, 10, 0, TRUE, NULL),
@@ -139,7 +139,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Garagem', 'Fazer a triagem de tralha para doar ou deitar fora', 'Anual', 4, 120, 3, TRUE, NULL);
 
 -- Jardim
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Jardim', 'Regar as plantas e os vasos manuais', 'Diária', 1, 15, 0, TRUE, NULL),
 ('Jardim', 'Verificar e ajustar o sistema de rega automática', 'Mensal', 1, 10, 0, TRUE, NULL),
 ('Jardim', 'Cortar a relva', 'Quinzenal', 2, 60, 3, TRUE, NULL),
@@ -154,7 +154,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Jardim', 'Limpar, afiar e lubrificar ferramentas de jardinagem', 'Anual', 4, 30, 1, TRUE, NULL);
 
 -- Escadas
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Escadas', 'Recolher objetos soltos nos degraus', 'Diária', 1, 2, 0, TRUE, NULL),
 ('Escadas', 'Desinfetar e limpar o corrimão', 'Semanal', 1, 5, 0, TRUE, NULL),
 ('Escadas', 'Varrer os degraus e os patamares', 'Semanal', 2, 10, 1, TRUE, NULL),
@@ -168,7 +168,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Escadas', 'Encerar ou aplicar produto de tratamento na madeira', 'Anual', 4, 45, 3, TRUE, NULL);
 
 -- Varanda
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Varanda', 'Verificar e desobstruir o ralo de escoamento', 'Mensal', 1, 5, 1, TRUE, NULL),
 ('Varanda', 'Regar os vasos de plantas', 'Diária', 1, 5, 0, TRUE, NULL),
 ('Varanda', 'Despejar cinzeiros e apanhar pequeno lixo', 'Diária', 1, 2, 0, TRUE, NULL),
@@ -182,7 +182,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Varanda', 'Limpar o pó de interruptores e candeeiros de exterior', 'Trimestral', 4, 5, 1, TRUE, NULL);
 
 -- Marquise
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Marquise', 'Abrir as janelas para arejar e evitar condensação/humidade', 'Diária', 1, 2, 0, TRUE, NULL),
 ('Marquise', 'Limpar a condensação dos vidros (especialmente no inverno)', 'Diária', 2, 5, 1, TRUE, NULL),
 ('Marquise', 'Estender ou recolher a roupa do estendal', 'Semanal', 1, 15, 1, TRUE, NULL),
@@ -196,7 +196,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Marquise', 'Lavar a fundo os estores ou persianas', 'Semestral', 4, 60, 3, TRUE, NULL);
 
 -- Piscina
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('Piscina', 'Retirar folhas e insetos da superfície com o xalavar (rede)', 'Diária', 1, 10, 1, TRUE, NULL),
 ('Piscina', 'Esvaziar os cestos dos skimmers', 'Semanal', 1, 5, 0, TRUE, NULL),
 ('Piscina', 'Testar os níveis de pH e cloro da água', 'Semanal', 1, 5, 0, TRUE, NULL),
