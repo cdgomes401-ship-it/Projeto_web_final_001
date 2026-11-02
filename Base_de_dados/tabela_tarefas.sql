@@ -25,25 +25,25 @@ CREATE TABLE IF NOT EXISTS tarefas (
 
 -- WC
 INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
-('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, TRUE, NULL),
-('WC', 'Lavar chão', 'Semanal', 1, 8, 2, TRUE, NULL),
-('WC', 'Lavar louças de casa de banho', 'Semanal', 1, 12, 2, TRUE, NULL),
-('WC', 'Colocar lixívia na sanita', 'Semanal', 3, 2, 0, TRUE, NULL),
-('WC', 'Limpar espelhos', 'Semanal', 1, 3, 1, TRUE, NULL),
-('WC', 'Mudar lixo', 'Semanal', 1, 2, 0, TRUE, NULL),
-('WC', 'Trocar areias dos gatos', 'Semanal', 1, 5, 1, TRUE, NULL),
-('WC', 'Substituir tapete e toalhas', 'Semanal', 1, 2, 0, TRUE, NULL),
-('WC', 'Limpar piaçaba e pousador', 'Semanal', 1, 2, 1, TRUE, NULL),
-('WC', 'Limpar paredes', 'Semanal', 3, 15, 3, TRUE, NULL),
-('WC', 'Limpar tetos com lixívia', 'Mensal', 1, 15, 3, TRUE, NULL),
-('WC', 'Lavar janelas por dentro', 'Mensal', 2, 10, 2, TRUE, NULL),
-('WC', 'Limpar juntas dos azulejos', 'Semestral', 3, 20, 3, TRUE, NULL),
-('WC', 'Limpar armários interior', 'Semestral', 2, 10, 1, TRUE, NULL),
-('WC', 'Verificar datas de validade dos medicamentos', 'Semestral', 1, 5, 0, TRUE, NULL),
-('WC', 'Limpar em baixo do armário', 'Semestral', 1, 5, 1, TRUE, NULL),
-('WC', 'Limpar por cima do espelho', 'Semestral', 2, 5, 1, TRUE, NULL),
-('WC', 'Lavar caixotes do lixo', 'Semestral', 3, 10, 2, TRUE, NULL),
-('WC', 'Lavar cortina de banho', 'Mensal', 2, 5, 1, TRUE, NULL);
+('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, FALSE, NULL),
+('WC', 'Lavar chão', 'Semanal', 1, 8, 2, FALSE, NULL),
+('WC', 'Lavar louças de casa de banho', 'Semanal', 1, 12, 2, FALSE, NULL),
+('WC', 'Colocar lixívia na sanita', 'Semanal', 3, 2, 0, FALSE, NULL),
+('WC', 'Limpar espelhos', 'Semanal', 1, 3, 1, FALSE, NULL),
+('WC', 'Mudar lixo', 'Semanal', 1, 2, 0, FALSE, NULL),
+('WC', 'Trocar areias dos gatos', 'Semanal', 1, 5, 1, FALSE, NULL),
+('WC', 'Substituir tapete e toalhas', 'Semanal', 1, 2, 0, FALSE, NULL),
+('WC', 'Limpar piaçaba e pousador', 'Semanal', 1, 2, 1, FALSE, NULL),
+('WC', 'Limpar paredes', 'Semanal', 3, 15, 3, FALSE, NULL),
+('WC', 'Limpar tetos com lixívia', 'Mensal', 1, 15, 3, FALSE, NULL),
+('WC', 'Lavar janelas por dentro', 'Mensal', 2, 10, 2, FALSE, NULL),
+('WC', 'Limpar juntas dos azulejos', 'Semestral', 3, 20, 3, FALSE, NULL),
+('WC', 'Limpar armários interior', 'Semestral', 2, 10, 1, FALSE, NULL),
+('WC', 'Verificar datas de validade dos medicamentos', 'Semestral', 1, 5, 0, FALSE, NULL),
+('WC', 'Limpar em baixo do armário', 'Semestral', 1, 5, 1, FALSE, NULL),
+('WC', 'Limpar por cima do espelho', 'Semestral', 2, 5, 1, FALSE, NULL),
+('WC', 'Lavar caixotes do lixo', 'Semestral', 3, 10, 2, FALSE, NULL),
+('WC', 'Lavar cortina de banho', 'Mensal', 2, 5, 1, FALSE, NULL);
 
 -- Sala de estar
 INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
