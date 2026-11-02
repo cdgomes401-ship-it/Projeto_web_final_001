@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 app.get("/api/tarefas", async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, tarefa AS text, divisao AS cat, concluido AS done FROM tarefas ORDER BY id"
+      "SELECT id, tarefa AS text, divisao AS cat, concluido AS done, prioridade, nivel_energia, tempo_estimado_min FROM tarefas ORDER BY id"
     );
     res.json(rows.map((task) => ({ ...task, done: Boolean(task.done) })));
   } catch (error) {
@@ -59,10 +59,21 @@ app.get("/api/tarefas/categorias", async (req, res) => {
 });
 
 app.post("/api/tarefas", async (req, res) => {
-  const { text, cat } = req.body;
+  const { text, cat, prioridade, nivel_energia } = req.body;
 
-  if (typeof text !== "string" || !text.trim() || typeof cat !== "string" || !cat.trim()) {
-    return res.status(400).json({ msg: "Indique uma tarefa e uma categoria válidas." });
+  if (
+    typeof text !== "string" ||
+    !text.trim() ||
+    typeof cat !== "string" ||
+    !cat.trim() ||
+    !Number.isInteger(prioridade) ||
+    prioridade < 1 ||
+    prioridade > 4 ||
+    !Number.isInteger(nivel_energia) ||
+    nivel_energia < 0 ||
+    nivel_energia > 3
+  ) {
+    return res.status(400).json({ msg: "Indique uma tarefa, categoria, prioridade e energia válidas." });
   }
 
   try {
@@ -75,10 +86,17 @@ app.post("/api/tarefas", async (req, res) => {
     }
 
     const [result] = await pool.execute(
-      "INSERT INTO tarefas (tarefa, divisao) VALUES (?, ?)",
-      [text.trim(), cat]
+      "INSERT INTO tarefas (tarefa, divisao, frequencia, prioridade, tempo_estimado_min, nivel_energia) VALUES (?, ?, 'Não definida', ?, 0, ?)",
+      [text.trim(), cat, prioridade, nivel_energia]
     );
-    res.status(201).json({ id: result.insertId, text: text.trim(), cat, done: false });
+    res.status(201).json({
+      id: result.insertId,
+      text: text.trim(),
+      cat,
+      done: false,
+      prioridade,
+      nivel_energia
+    });
   } catch (error) {
     console.error("Erro ao criar tarefa:", error.message);
     res.status(500).json({ msg: "Não foi possível guardar a tarefa." });
@@ -87,21 +105,55 @@ app.post("/api/tarefas", async (req, res) => {
 
 app.patch("/api/tarefas/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const { done } = req.body;
+  const fields = [];
+  const values = [];
+  const { done, prioridade, nivel_energia, tempo_estimado_min } = req.body;
 
-  if (!Number.isInteger(id) || id < 1 || typeof done !== "boolean") {
-    return res.status(400).json({ msg: "Indique uma tarefa e um estado válidos." });
+  if (!Number.isInteger(id) || id < 1) {
+    return res.status(400).json({ msg: "Indique uma tarefa válida." });
+  }
+  if (Object.hasOwn(req.body, "done")) {
+    if (typeof done !== "boolean") {
+      return res.status(400).json({ msg: "Indique um estado válido." });
+    }
+    fields.push("concluido = ?");
+    values.push(done);
+  }
+  if (Object.hasOwn(req.body, "prioridade")) {
+    if (!Number.isInteger(prioridade) || prioridade < 1 || prioridade > 4) {
+      return res.status(400).json({ msg: "A prioridade deve estar entre 1 e 4." });
+    }
+    fields.push("prioridade = ?");
+    values.push(prioridade);
+  }
+  if (Object.hasOwn(req.body, "nivel_energia")) {
+    if (!Number.isInteger(nivel_energia) || nivel_energia < 0 || nivel_energia > 3) {
+      return res.status(400).json({ msg: "O nível de energia deve estar entre 0 e 3." });
+    }
+    fields.push("nivel_energia = ?");
+    values.push(nivel_energia);
+  }
+  if (Object.hasOwn(req.body, "tempo_estimado_min")) {
+    if (!Number.isInteger(tempo_estimado_min) || tempo_estimado_min < 1 || tempo_estimado_min > 2147483647) {
+      return res.status(400).json({ msg: "O tempo estimado deve ser um número inteiro de minutos superior a zero." });
+    }
+    fields.push("tempo_estimado_min = ?");
+    values.push(tempo_estimado_min);
+  }
+  if (fields.length === 0) {
+    return res.status(400).json({ msg: "Indique um estado, prioridade, nível de energia ou tempo estimado para atualizar." });
   }
 
   try {
-    const [result] = await pool.execute(
-      "UPDATE tarefas SET concluido = ? WHERE id = ?",
-      [done, id]
-    );
+    values.push(id);
+    const [result] = await pool.execute(`UPDATE tarefas SET ${fields.join(", ")} WHERE id = ?`, values);
     if (result.affectedRows === 0) {
-      return res.status(404).json({ msg: "Tarefa não encontrada." });
+      const [rows] = await pool.execute("SELECT id FROM tarefas WHERE id = ?", [id]);
+      if (rows.length === 0) {
+        return res.status(404).json({ msg: "Tarefa não encontrada." });
+      }
     }
-    res.status(200).json({ id, done });
+    res.status(200).json({ id, done, prioridade, nivel_energia, tempo_estimado_min });
   } catch (error) {
     console.error("Erro ao atualizar tarefa:", error.message);
     res.status(500).json({ msg: "Não foi possível atualizar a tarefa." });

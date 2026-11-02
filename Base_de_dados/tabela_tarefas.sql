@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS tarefas (
 );
 
 -- WC
-<<<<<<< HEAD
-INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, nao_concluido, ultima_conclusao) VALUES
+
+INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, FALSE, NULL),
 ('WC', 'Lavar chão', 'Semanal', 1, 8, 2, FALSE, NULL),
 ('WC', 'Lavar louças de casa de banho', 'Semanal', 1, 12, 2, FALSE, NULL),
@@ -34,8 +34,8 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('WC', 'Mudar lixo', 'Semanal', 1, 2, 0, FALSE, NULL),
 ('WC', 'Trocar areias dos gatos', 'Semanal', 1, 5, 1, FALSE, NULL),
 ('WC', 'Substituir tapete e toalhas', 'Semanal', 1, 2, 0, FALSE, NULL),
-('WC', 'Limpar piaçaba e pousador', 'Semanal', 1, 2, 1, FALSE, NULL),
-=======
+('WC', 'Limpar piaçaba e pousador', 'Semanal', 1, 2, 1, FALSE, NULL);
+
 INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, FALSE, NULL),
 ('WC', 'Lavar chão', 'Semanal', 1, 8, 2, FALSE, NULL),
@@ -56,7 +56,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('WC', 'Limpar por cima do espelho', 'Semestral', 2, 5, 1, FALSE, NULL),
 ('WC', 'Lavar caixotes do lixo', 'Semestral', 3, 10, 2, FALSE, NULL),
 ('WC', 'Lavar cortina de banho', 'Mensal', 2, 5, 1, FALSE, NULL);
-=======
+
 INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
 ('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, FALSE, NULL),
 ('WC', 'Lavar chão', 'Semanal', 1, 8, 2, FALSE, NULL),
@@ -77,7 +77,7 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('WC', 'Limpar por cima do espelho', 'Semestral', 2, 5, 1, FALSE, NULL),
 ('WC', 'Lavar caixotes do lixo', 'Semestral', 3, 10, 2, FALSE  , NULL),
 ('WC', 'Lavar cortina de banho', 'Mensal', 2, 5, 1, FALSE, NULL);
->>>>>>> 5bcae86ab19ac05df6664676c7a6eabde1aa3640
+
 
 -- Sala de estar
 INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES
