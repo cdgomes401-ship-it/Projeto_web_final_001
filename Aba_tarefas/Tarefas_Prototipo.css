@@ -35,6 +35,23 @@
     border-bottom: 5px solid #6d4429;
 }
 
+#batata {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    gap: 30px;
+    margin: 0 auto;
+}
+
+#batata a {
+    color: #dfead7;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #9ec955;
+}
   header{
     background: var(--sage);
     padding: 28px 20px 40px;
