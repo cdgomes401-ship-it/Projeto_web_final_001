@@ -46,9 +46,11 @@ async function loadTasks() {
 }
 
 function render() {
-  const visible = activeCat === "todas"
-    ? tasks
-    : tasks.filter((task) => task.cat === activeCat && task.done =="0");
+  const completedOnly = document.getElementById("completed-only").checked;
+  const visible = tasks.filter((task) =>
+    (activeCat === "todas" || (task.cat === activeCat )) &&
+    (!completedOnly || task.done)
+  );
   const listEl = document.getElementById("task-list");
   const filtersEl = document.getElementById("cat-filters");
   const categoryInput = document.getElementById("cat-input");
@@ -192,9 +194,9 @@ function render() {
     listEl.appendChild(row);
   });
 
-  const done = tasks.filter((task) => task.done).length;
-  const pct = tasks.length === 0 ? 0 : Math.round((done / tasks.length) * 100);
-  progressText.textContent = `${done} de ${tasks.length} tarefas concluídas hoje`;
+  const done = visible.filter((visible) => visible.done).length;
+  const pct = visible.length === 0 ? 0 : Math.round((done / visible.length) * 100);
+  progressText.textContent = `${done} de ${visible.length} tarefas concluídas hoje`;
   progressPct.textContent = `${pct}%`;
 
   xpBar.replaceChildren();
@@ -355,6 +357,8 @@ document.getElementById("cat-filters").addEventListener("click", (event) => {
   activeCat = button.dataset.cat;
   render();
 });
+
+document.getElementById("completed-only").addEventListener("change", render);
 
 document.getElementById("add-form").addEventListener("submit", async (event) => {
   event.preventDefault();
