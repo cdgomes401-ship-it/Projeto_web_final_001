@@ -60,7 +60,7 @@
   }
 
   main{
-    max-width: 620px;
+    max-width: 80%;/*620px;*/
     margin: -22px auto 60px;
     padding: 0 18px;
   }

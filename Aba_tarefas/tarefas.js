@@ -48,7 +48,7 @@ async function loadTasks() {
 function render() {
   const visible = activeCat === "todas"
     ? tasks
-    : tasks.filter((task) => task.cat === activeCat);
+    : tasks.filter((task) => task.cat === activeCat && task.done =="0");
   const listEl = document.getElementById("task-list");
   const filtersEl = document.getElementById("cat-filters");
   const categoryInput = document.getElementById("cat-input");
@@ -113,7 +113,7 @@ function render() {
     check.textContent = task.done ? "✓" : "";
 
     const details = document.createElement("div");
-    details.style.flex = "1";
+    details.style.flex = ".8";
 
     const text = document.createElement("div");
     text.className = "task-text";
@@ -122,6 +122,7 @@ function render() {
     const category = document.createElement("div");
     category.className = "task-cat";
     category.textContent = `${CAT_ICON[task.cat] || "📦"} ${task.cat}`;
+    category.style.flex = "1";
 
     const estimatedTime = document.createElement("div");
     estimatedTime.className = "task-time";
@@ -173,7 +174,7 @@ function render() {
     timerButton.dataset.id = task.id;
     timerButton.textContent = "⏱ Timer";
     timerButton.setAttribute("aria-label", `Abrir timer para ${task.text}`);
-    controls.append(priority, energy, timerButton);
+    //controls.append(priority, energy, timerButton);
 
     const remove = document.createElement("button");
     remove.type = "button";
@@ -182,8 +183,12 @@ function render() {
     remove.setAttribute("aria-label", "Remover tarefa");
     remove.textContent = "✕";
 
-    details.append(text, category, estimatedTime);
-    row.append(check, details, controls, remove);
+    priority_auxi = document.createElement("div");
+    priority_auxi.style.flex = "0";
+    priority_auxi.append("Prioridade", priority);
+
+    details.append(text, estimatedTime);
+    row.append(check,  details, category,priority_auxi, energy, timerButton, remove);
     listEl.appendChild(row);
   });
 
