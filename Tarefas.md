@@ -28,7 +28,6 @@ Página comunidade
 integração do calendário da google
 
 Arthur:
-Timer e descobrir como integrar na página
 Página de calendário
 Página blog
 

@@ -22,6 +22,20 @@
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     line-height: 1.5;
   }
+/* ==========================================================================
+   2. CABEÇALHO
+   ========================================================================== */
+
+.topbar {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #182f22;
+    color: #fff;
+    border-bottom: 5px solid #6d4429;
+}
 
   header{
     background: var(--sage);
@@ -33,7 +47,7 @@
   .logo{
     font-family: 'Press Start 2P', monospace;
     font-size: 15px;
-    color: var(--ink);
+    color: #fff;/*var(--ink);*/
     letter-spacing: 1px;
     margin: 0 0 10px;
   }
@@ -46,10 +60,16 @@
   }
 
   main{
-    max-width: 620px;
+    max-width: 80%;/*620px;*/
     margin: -22px auto 60px;
     padding: 0 18px;
   }
+
+  .grass-icon {
+    color: #8fc345;
+    text-shadow: 4px 4px #75452c;
+    font-size: 24px;
+}
 
   .progress-panel{
     background: var(--panel);
@@ -104,12 +124,15 @@
   }
 
   .add-row{
-    display:flex;
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap:8px;
     margin-bottom: 22px;
   }
 
   .add-row input, .add-row select{
+    min-width: 0;
+    width: 100%;
     font-family: inherit;
     font-size: 15px;
     padding: 10px;
@@ -118,7 +141,7 @@
     background: #fff;
   }
 
-  .add-row input{ flex:1; min-width: 120px; }
+  .add-row input, .add-row button{ grid-column: 1 / -1; }
 
   .add-row button{
     font-family: 'Press Start 2P', monospace;
@@ -127,6 +150,7 @@
     color: #fff;
     border: none;
     border-radius: var(--radius);
+    min-height: 42px;
     padding: 0 16px;
     cursor: pointer;
   }
@@ -174,6 +198,115 @@
   .task-text{ flex:1; font-size: 15px; }
 
   .task-cat{ font-size: 11px; opacity: 0.85; }
+
+  .task-time{ font-size: 11px; opacity: 0.85; }
+
+  .task-controls{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+
+  .task-field{
+    max-width: 150px;
+    font: inherit;
+    font-size: 12px;
+    color: var(--ink);
+    padding: 5px;
+    border: 1px solid var(--wood-dark);
+    border-radius: var(--radius);
+    background: var(--cream);
+  }
+
+  .timer-open{
+    font: inherit;
+    font-size: 12px;
+    color: var(--ink);
+    padding: 5px 8px;
+    border: 1px solid var(--wood-dark);
+    border-radius: var(--radius);
+    background: var(--gold);
+    cursor: pointer;
+  }
+
+  #timer-dialog{
+    width: min(440px, calc(100vw - 32px));
+    padding: 0;
+    border: 4px solid var(--wood-dark);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--ink);
+  }
+
+  #timer-dialog::backdrop{ background: rgba(58,51,36,0.8); }
+
+  .timer-card{
+    position: relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    padding: 30px 22px 22px;
+    text-align:center;
+  }
+
+  .timer-card h2{
+    margin:0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .timer-close{
+    position:absolute;
+    top:4px;
+    right:8px;
+    border:0;
+    background:none;
+    color:var(--ink);
+    font-size:28px;
+    cursor:pointer;
+  }
+
+  .timer-task{ margin:0; }
+
+  .timer-display{
+    font-size: clamp(3rem, 15vmin, 6rem);
+    font-variant-numeric: tabular-nums;
+    line-height:1.2;
+  }
+
+  .timer-minutes-label{ font-size:14px; }
+
+  #timer-minutes{
+    width:6em;
+    padding:8px;
+    border:2px solid var(--wood-dark);
+    border-radius:var(--radius);
+    font:inherit;
+    text-align:center;
+  }
+
+  .timer-error{ min-height:1.5em; margin:0; color:#9b1c1c; }
+
+  .timer-actions{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .timer-actions button{
+    padding:8px 12px;
+    border:2px solid var(--wood-dark);
+    border-radius:var(--radius);
+    background:var(--cream);
+    color:var(--ink);
+    font:inherit;
+    cursor:pointer;
+  }
+
+  .timer-actions #timer-save{ background:var(--sage); }
 
   .remove-btn{
     background:none;
@@ -259,4 +392,11 @@
 
   @media (prefers-reduced-motion: no-preference){
     .item-frame{ transition: opacity 0.2s ease; }
+  }
+
+  @media (max-width: 480px){
+    .add-row{ grid-template-columns: minmax(0, 1fr); }
+    .add-row input, .add-row button{ grid-column: auto; }
+    .item-frame{ gap:8px; padding: 10px; }
+    .task-field{ max-width: 125px; }
   }

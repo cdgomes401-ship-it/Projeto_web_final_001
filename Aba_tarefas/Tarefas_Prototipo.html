@@ -11,13 +11,14 @@
 </head>
 <body>
 
-<header>
-  <p class="logo">🖼️ TAREFINHA</p>
+<header class="topbar">
+  <p class="logo"><span class="grass-icon">▰</span> TAREFINHA</p>
   <p>Cada tarefa é um quadrinho no seu dia. Um bloco de cada vez — sem pressa, sem sobrecarga.</p>
 </header>
 
-<main>
-
+<main style="display: flex;">
+  <div>\br \br /br /br qualquer</div>
+<div>
   <div class="progress-panel">
     <div class="label">
       <span id="progress-text">0 de 0 tarefas concluídas hoje</span>
@@ -31,14 +32,45 @@
   <form class="add-row" id="add-form">
     <input type="text" id="task-input" placeholder="Nova tarefa, ex: regar as plantas" required>
     <select id="cat-input" aria-label="Categoria da tarefa" required></select>
+    <select id="priority-input" aria-label="Prioridade da tarefa" required>
+      <option value="" selected disabled>Prioridade</option>
+      <option value="1">1 - Muito alta</option>
+      <option value="2">2 - Alta</option>
+      <option value="3">3 - Média</option>
+      <option value="4">4 - Normal</option>
+    </select>
+    <select id="energy-input" aria-label="Nível de energia da tarefa" required>
+      <option value="" selected disabled>Energia</option>
+      <option value="0">0 - Muito baixa</option>
+      <option value="1">1 - Baixa</option>
+      <option value="2">2 - Média</option>
+      <option value="3">3 - Alta</option>
+    </select>
     <button type="submit">Add</button>
   </form>
 
   <div class="task-list" id="task-list"></div>
 
   <button class="focus-btn" id="focus-btn">▶ Modo foco</button>
-
+</div>
 </main>
+
+<dialog id="timer-dialog" aria-labelledby="timer-title">
+  <div class="timer-card">
+    <button type="button" class="timer-close" id="timer-close" aria-label="Fechar timer">&times;</button>
+    <h2 id="timer-title">Timer da tarefa</h2>
+    <p class="timer-task" id="timer-task-name"></p>
+    <output id="timer-display" class="timer-display" aria-live="polite">05:00</output>
+    <label class="timer-minutes-label" for="timer-minutes">Duração da estimativa (minutos)</label>
+    <input id="timer-minutes" type="number" min="1" max="2147483647" value="5" required>
+    <p id="timer-error" class="timer-error" role="alert"></p>
+    <div class="timer-actions">
+      <button type="button" id="timer-start">Iniciar</button>
+      <button type="button" id="timer-reset">Reiniciar</button>
+      <button type="button" id="timer-save">Guardar estimativa</button>
+    </div>
+  </div>
+</dialog>
 
 <div class="overlay hidden" id="overlay">
   <div class="focus-card">
