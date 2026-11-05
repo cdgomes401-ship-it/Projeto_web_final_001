@@ -34,10 +34,10 @@ Página blog
 
 
 João:
-1 - repensar a base de dados(colocar como caracteristica o local)
-2 - comandos com base de dados (filtro por categoria, organizar desc, inserir dado, eliminar, editar)
 
-Formulário para registo
+2 - comandos com base de dados (filtro por categoria, organizar desc, inserir dado, eliminar, editar) - quase? confirmar quais faltam
+
+
 
 
 
@@ -53,5 +53,6 @@ Página login/ registo
 Imagens para fazer animação
 -ligar a pagina crua html e css com landing page com sobre nos integrado.  - js
 Página das tarefas-prototipo
-
+1 - repensar a base de dados(colocar como caracteristica o local) - js
+Formulário para registo - js
 

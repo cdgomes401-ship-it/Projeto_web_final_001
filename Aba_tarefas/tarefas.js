@@ -1,10 +1,10 @@
 const CAT_ICON = {
   Casa: "🏠",
   Autocuidado: "🌸",
-  "Plantas & Bichos": "🪴",
+  "Jardim": "🪴",
   Outros: "📦",
-  WC : "🏠",
-  "Sala de estar" : "🏠"
+  WC: "🏠",
+  "Sala de estar": "🏠"
 };
 
 let tasks = [];
@@ -26,6 +26,53 @@ async function requestTasks(path = "", options = {}) {
   return body;
 }
 
+// ---------------------------------------
+/*
+const modal = document.getElementById('loginModal');
+const openBtn = document.getElementById('openModal');
+const closeBtn = document.getElementById('closeModal');
+const form = document.getElementById('loginForm');
+const pickaxe = document.querySelector('#picareta_imag img');
+
+
+
+
+
+form.addEventListener('input', (event) => {
+  if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
+    return;
+  }
+
+  pickaxe.classList.remove('swing');
+  void pickaxe.offsetWidth;
+  pickaxe.classList.add('swing');
+});
+
+// Abre o modal como uma janela sobreposta (com o fundo escuro)
+openBtn.addEventListener('click', () => {
+  modal.showModal();
+});
+
+// Fecha o modal ao clicar em Cancelar
+closeBtn.addEventListener('click', () => {
+  modal.close();
+});
+
+// Processa os dados quando o formulário é submetido
+form.addEventListener('submit', (e) => {
+  // Se não quiser usar o comportamento nativo de fechar no submit, 
+  // pode usar e.preventDefault() aqui para validar com AJAX/Fetch.
+
+  const email = document.getElementById('email').value;
+  console.log('Tentativa de login com:', email);
+
+  // Opcional: limpa os campos após fechar
+  form.reset();
+});
+
+*/
+// ---------------------------------------
+
 async function loadTasks() {
   try {
     const [loadedTasks, loadedCategories] = await Promise.all([
@@ -46,9 +93,11 @@ async function loadTasks() {
 }
 
 function render() {
-  const visible = activeCat === "todas"
-    ? tasks
-    : tasks.filter((task) => task.cat === activeCat);
+  const completedOnly = document.getElementById("completed-only").checked;
+  const visible = tasks.filter((task) =>
+    (activeCat === "todas" || (task.cat === activeCat)) &&
+    (!completedOnly || task.done)
+  );
   const listEl = document.getElementById("task-list");
   const filtersEl = document.getElementById("cat-filters");
   const categoryInput = document.getElementById("cat-input");
@@ -113,7 +162,7 @@ function render() {
     check.textContent = task.done ? "✓" : "";
 
     const details = document.createElement("div");
-    details.style.flex = "1";
+    details.style.flex = ".8";
 
     const text = document.createElement("div");
     text.className = "task-text";
@@ -122,6 +171,59 @@ function render() {
     const category = document.createElement("div");
     category.className = "task-cat";
     category.textContent = `${CAT_ICON[task.cat] || "📦"} ${task.cat}`;
+    category.style.flex = "1";
+
+    const estimatedTime = document.createElement("div");
+    estimatedTime.className = "task-time";
+    estimatedTime.textContent = task.tempo_estimado_min > 0
+      ? `⏱ Estimativa: ${task.tempo_estimado_min} min`
+      : "⏱ Sem estimativa";
+
+    const controls = document.createElement("div");
+    controls.className = "task-controls";
+
+    const priority = document.createElement("select");
+    priority.className = "task-field";
+    priority.dataset.id = task.id;
+    priority.dataset.field = "prioridade";
+    priority.setAttribute("aria-label", `Prioridade de ${task.text}`);
+    [
+      [1, "1 - Muito alta"],
+      [2, "2 - Alta"],
+      [3, "3 - Média"],
+      [4, "4 - Normal"]
+    ].forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      priority.appendChild(option);
+    });
+    priority.value = String(task.prioridade);
+
+    const energy = document.createElement("select");
+    energy.className = "task-field";
+    energy.dataset.id = task.id;
+    energy.dataset.field = "nivel_energia";
+    energy.setAttribute("aria-label", `Nível de energia de ${task.text}`);
+    [
+      [0, "0 - Muito baixa"],
+      [1, "1 - Baixa"],
+      [2, "2 - Média"],
+      [3, "3 - Alta"]
+    ].forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      energy.appendChild(option);
+    });
+    energy.value = String(task.nivel_energia);
+    const timerButton = document.createElement("button");
+    timerButton.type = "button";
+    timerButton.className = "timer-open";
+    timerButton.dataset.id = task.id;
+    timerButton.textContent = "⏱ Timer";
+    timerButton.setAttribute("aria-label", `Abrir timer para ${task.text}`);
+    //controls.append(priority, energy, timerButton);
 
     const remove = document.createElement("button");
     remove.type = "button";
@@ -130,14 +232,18 @@ function render() {
     remove.setAttribute("aria-label", "Remover tarefa");
     remove.textContent = "✕";
 
-    details.append(text, category);
-    row.append(check, details, remove);
+    priority_auxi = document.createElement("div");
+    priority_auxi.style.flex = "0";
+    priority_auxi.append("Prioridade", priority);
+
+    details.append(text, estimatedTime);
+    row.append(check, details, category, priority_auxi, energy, timerButton, remove);
     listEl.appendChild(row);
   });
 
-  const done = tasks.filter((task) => task.done).length;
-  const pct = tasks.length === 0 ? 0 : Math.round((done / tasks.length) * 100);
-  progressText.textContent = `${done} de ${tasks.length} tarefas concluídas hoje`;
+  const done = visible.filter((visible) => visible.done).length;
+  const pct = visible.length === 0 ? 0 : Math.round((done / visible.length) * 100);
+  progressText.textContent = `${done} de ${visible.length} tarefas concluídas hoje`;
   progressPct.textContent = `${pct}%`;
 
   xpBar.replaceChildren();
@@ -148,7 +254,65 @@ function render() {
   }
 }
 
+const timerDialog = document.getElementById("timer-dialog");
+const timerTaskName = document.getElementById("timer-task-name");
+const timerDisplay = document.getElementById("timer-display");
+const timerMinutes = document.getElementById("timer-minutes");
+const timerError = document.getElementById("timer-error");
+let timerTaskId = null;
+let timerRemaining = 0;
+let timerInterval;
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(timerRemaining / 60);
+  const seconds = timerRemaining % 60;
+  timerDisplay.textContent = timerRemaining > 0
+    ? `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+    : "Acabou!";
+}
+
+function readTimerMinutes() {
+  const minutes = Number(timerMinutes.value);
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 2147483647) {
+    timerError.textContent = "Indique uma duração válida, superior a zero.";
+    return null;
+  }
+
+  timerError.textContent = "";
+  return minutes;
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  const minutes = readTimerMinutes();
+  if (minutes === null) {
+    timerRemaining = 0;
+    timerDisplay.textContent = "00:00";
+    return false;
+  }
+
+  timerRemaining = minutes * 60;
+  updateTimerDisplay();
+  return true;
+}
+
+function openTaskTimer(task) {
+  timerTaskId = String(task.id);
+  timerTaskName.textContent = task.text;
+  timerMinutes.value = String(task.tempo_estimado_min > 0 ? task.tempo_estimado_min : 5);
+  timerError.textContent = "";
+  resetTimer();
+  timerDialog.showModal();
+}
+
 document.getElementById("task-list").addEventListener("click", async (event) => {
+  const timerButton = event.target.closest(".timer-open");
+  if (timerButton) {
+    const task = tasks.find((item) => String(item.id) === timerButton.dataset.id);
+    if (task) openTaskTimer(task);
+    return;
+  }
+
   const check = event.target.closest(".check");
   const remove = event.target.closest(".remove-btn");
   const taskId = check?.dataset.id || remove?.dataset.id;
@@ -163,9 +327,69 @@ document.getElementById("task-list").addEventListener("click", async (event) => 
         method: "PATCH",
         body: JSON.stringify({ done: !task.done })
       });
-    } else {
+    } else if (remove) {
       await requestTasks(`/${taskId}`, { method: "DELETE" });
     }
+    await loadTasks();
+  } catch (error) {
+    errorMessage = error.message;
+    render();
+  }
+});
+
+document.getElementById("timer-start").addEventListener("click", () => {
+  if (!resetTimer()) return;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timerRemaining -= 1;
+    updateTimerDisplay();
+    if (timerRemaining <= 0) clearInterval(timerInterval);
+  }, 1000);
+});
+
+document.getElementById("timer-reset").addEventListener("click", resetTimer);
+
+document.getElementById("timer-close").addEventListener("click", () => {
+  timerDialog.close();
+});
+
+timerDialog.addEventListener("close", () => {
+  clearInterval(timerInterval);
+  timerTaskId = null;
+});
+
+document.getElementById("timer-save").addEventListener("click", async () => {
+  if (!timerTaskId) return;
+
+  const minutes = readTimerMinutes();
+  if (minutes === null) return;
+  const saveButton = document.getElementById("timer-save");
+  saveButton.disabled = true;
+  timerError.textContent = "";
+  try {
+    await requestTasks(`/${timerTaskId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ tempo_estimado_min: minutes })
+    });
+    timerDialog.close();
+    await loadTasks();
+  } catch (error) {
+    timerError.textContent = error.message;
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+document.getElementById("task-list").addEventListener("change", async (event) => {
+  const field = event.target.closest(".task-field");
+  if (!field) return;
+
+  try {
+    await requestTasks(`/${field.dataset.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ [field.dataset.field]: Number(field.value) })
+    });
     await loadTasks();
   } catch (error) {
     errorMessage = error.message;
@@ -181,19 +405,28 @@ document.getElementById("cat-filters").addEventListener("click", (event) => {
   render();
 });
 
+document.getElementById("completed-only").addEventListener("change", render);
+
 document.getElementById("add-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = document.getElementById("task-input");
   const category = document.getElementById("cat-input");
+  const priority = document.getElementById("priority-input");
+  const energy = document.getElementById("energy-input");
   const text = input.value.trim();
   if (!text) return;
 
   try {
     await requestTasks("", {
       method: "POST",
-      body: JSON.stringify({ text, cat: category.value })
+      body: JSON.stringify({
+        text,
+        cat: category.value,
+        prioridade: Number(priority.value),
+        nivel_energia: Number(energy.value)
+      })
     });
-    input.value = "";
+    event.target.reset();
     await loadTasks();
   } catch (error) {
     errorMessage = error.message;
@@ -258,3 +491,28 @@ document.getElementById("focus-skip").addEventListener("click", () => {
 });
 
 loadTasks();
+/*
+login.addEventListener("click", async (event) => {
+  event.preventDefault();
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+
+  if (!password) return;
+
+  try {
+    const resposta = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    event.target.reset();
+    console.log(resposta);
+  } catch (error) {
+    errorMessage = error.message;
+  }
+  console.log("Deu certo");
+  window.location.href = "/Tarefas_Prototipo.html"
+});
+*/
