@@ -8,6 +8,18 @@ const PORT = 3000;
 const mysql = require("mysql2/promise");
 // INJETAR VARIAVEIS DE AMBIENTE
 require("dotenv").config();
+// PARA USUARIO
+const bcrypt = require("bcrypt");
+const session =require("express-session");
+app.use(session({
+  secret: "segredoSuperSecret",
+  resave:false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: "lax"
+  }
+}));
 
 const path = require("node:path");
 
@@ -15,6 +27,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 
 
+const landingPageDirectory = path.join(__dirname, "..", "LandingPage");
 const frontendDirectory = path.join(__dirname, "..", "Aba_tarefas");
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,
@@ -28,10 +41,11 @@ const pool = mysql.createPool({
 });
 
 app.use(express.json());
+app.use(express.static(landingPageDirectory));
 app.use(express.static(frontendDirectory));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(frontendDirectory, "Tarefas_Prototipo.html"));
+  res.sendFile(path.join(landingPageDirectory, "landingPage.html")); /*Tarefas_Prototipo.html"));*/
 });
 
 app.get("/api/tarefas", async (req, res) => {
@@ -46,10 +60,59 @@ app.get("/api/tarefas", async (req, res) => {
   }
 });
 
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  const [users] = await pool.execute(
+    "SELECT * FROM users WHERE email = ?",
+    [email]
+  );
+  console.log(users);
+  const user = users[0];
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({
+      message: "Login inválido"
+    });
+  }
+  // Guardar o utilizador na sessão
+  req.session.userId = users.id;
+  res.json({ message: "Login efetuado!", user });
+});
+
+app.post("/api/register", async (req, res) => {
+  const { name, email, password } = req.body;
+  // Verificar se os campos foram preenchidos
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      message: "Preenche todos os campos"
+    });
+  }
+  // Verificar se o email já existe
+  const [users] = await pool.execute(
+    "SELECT * FROM users WHERE email = ?",
+    [email]
+  );
+  if (users.length > 0) {
+    return res.status(409).json({
+      message: "Email já registado"
+    });
+  }
+  // Proteger a password
+  const hash = await bcrypt.hash(password, 10);
+  // Inserir utilizador na base de dados
+  await pool.execute(
+    "INSERT INTO users (nome_utilizador, email, password) VALUES (?, ?, ?)",
+    [name, email, hash]
+  );
+  res.status(201).json({
+    message: "Utilizador registado com sucesso!"
+  });
+});
+
 app.get("/api/tarefas/categorias", async (req, res) => {
+
   try {
     const [rows] = await pool.execute(
-      "SELECT DISTINCT divisao FROM tarefas WHERE divisao IS NOT NULL AND divisao <> '' ORDER BY divisao"
+      "SELECT DISTINCT divisao FROM tarefas WHERE id_user = ? and divisao IS NOT NULL AND divisao <> '' ORDER BY divisao", [req.session.id]
     );
     res.json(rows.map((row) => row.divisao));
   } catch (error) {
@@ -190,7 +253,10 @@ async function start() {
       tempo_estimado_min INT NOT NULL COMMENT 'minutos',
       nivel_energia INT NOT NULL COMMENT '0 = pouca energia, 3 = muita energia',
       concluido BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'FALSE = por concluir, TRUE = concluída',
-      ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)'
+      ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)',
+      id_user int,
+	    foreign key(id_user)
+	    references users(id)
     )
   `);
 
@@ -204,3 +270,6 @@ start().catch(async (error) => {
   await pool.end();
   process.exitCode = 1;
 });
+
+// post para registo
+// post para login

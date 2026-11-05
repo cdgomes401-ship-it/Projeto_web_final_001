@@ -52,6 +52,21 @@
 nav a:hover {
     color: #9ec955;
 }
+.Sign_up {
+    border: 0;
+    padding: 13px 18px;
+    background: #69ad3a;
+    color: white;
+    font-family: var(--pixel-font);
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: inset -3px -3px #407d14, inset 3px 3px #a4cf5e;
+}
+
+.Sign_up:hover {
+    background: #8cbd42;
+}
+
   header{
     background: var(--sage);
     padding: 28px 20px 40px;

@@ -10,6 +10,13 @@ COLLATE utf8mb4_unicode_ci;
 
 USE bd_tarefas;
 
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_utilizador VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL 
+);
+
 -- Tabela única: a divisão da casa passa a ser uma coluna
 CREATE TABLE IF NOT EXISTS tarefas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -20,7 +27,10 @@ CREATE TABLE IF NOT EXISTS tarefas (
     tempo_estimado_min INT NOT NULL COMMENT 'minutos',
     nivel_energia INT NOT NULL COMMENT '0 = pouca energia, 3 = muita energia',
     concluido BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'FALSE = por concluir, TRUE = concluída',
-    ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)'
+    ultima_conclusao DATE NULL DEFAULT NULL COMMENT 'data da última conclusão (vazio por agora)',
+    id_user int,
+	foreign key(id_user)
+	references users(id)
 );
 
 -- WC

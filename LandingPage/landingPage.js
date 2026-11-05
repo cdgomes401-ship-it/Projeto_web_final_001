@@ -29,6 +29,7 @@ const openBtn = document.getElementById('openModal');
 const closeBtn = document.getElementById('closeModal');
 const form = document.getElementById('loginForm');
 const pickaxe = document.querySelector('#picareta_imag img');
+const login = document.querySelector('.login-btn');
 
 form.addEventListener('input', (event) => {
   if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
@@ -61,3 +62,27 @@ form.addEventListener('input', (event) => {
       // Opcional: limpa os campos após fechar
       form.reset();
     });
+
+login.addEventListener("click", async (event) => {
+  event.preventDefault();
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+
+  if (!password) return;
+
+  try {
+    const resposta = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    event.target.reset();
+    console.log(resposta);
+  } catch (error) {
+    errorMessage = error.message;
+  }
+  console.log("Deu certo");
+  window.location.href = "/Tarefas_Prototipo.html"
+});

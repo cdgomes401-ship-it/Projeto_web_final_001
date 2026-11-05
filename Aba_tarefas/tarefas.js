@@ -3,8 +3,8 @@ const CAT_ICON = {
   Autocuidado: "🌸",
   "Jardim": "🪴",
   Outros: "📦",
-  WC : "🏠",
-  "Sala de estar" : "🏠"
+  WC: "🏠",
+  "Sala de estar": "🏠"
 };
 
 let tasks = [];
@@ -25,6 +25,53 @@ async function requestTasks(path = "", options = {}) {
 
   return body;
 }
+
+// ---------------------------------------
+/*
+const modal = document.getElementById('loginModal');
+const openBtn = document.getElementById('openModal');
+const closeBtn = document.getElementById('closeModal');
+const form = document.getElementById('loginForm');
+const pickaxe = document.querySelector('#picareta_imag img');
+
+
+
+
+
+form.addEventListener('input', (event) => {
+  if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
+    return;
+  }
+
+  pickaxe.classList.remove('swing');
+  void pickaxe.offsetWidth;
+  pickaxe.classList.add('swing');
+});
+
+// Abre o modal como uma janela sobreposta (com o fundo escuro)
+openBtn.addEventListener('click', () => {
+  modal.showModal();
+});
+
+// Fecha o modal ao clicar em Cancelar
+closeBtn.addEventListener('click', () => {
+  modal.close();
+});
+
+// Processa os dados quando o formulário é submetido
+form.addEventListener('submit', (e) => {
+  // Se não quiser usar o comportamento nativo de fechar no submit, 
+  // pode usar e.preventDefault() aqui para validar com AJAX/Fetch.
+
+  const email = document.getElementById('email').value;
+  console.log('Tentativa de login com:', email);
+
+  // Opcional: limpa os campos após fechar
+  form.reset();
+});
+
+*/
+// ---------------------------------------
 
 async function loadTasks() {
   try {
@@ -48,7 +95,7 @@ async function loadTasks() {
 function render() {
   const completedOnly = document.getElementById("completed-only").checked;
   const visible = tasks.filter((task) =>
-    (activeCat === "todas" || (task.cat === activeCat )) &&
+    (activeCat === "todas" || (task.cat === activeCat)) &&
     (!completedOnly || task.done)
   );
   const listEl = document.getElementById("task-list");
@@ -190,7 +237,7 @@ function render() {
     priority_auxi.append("Prioridade", priority);
 
     details.append(text, estimatedTime);
-    row.append(check,  details, category,priority_auxi, energy, timerButton, remove);
+    row.append(check, details, category, priority_auxi, energy, timerButton, remove);
     listEl.appendChild(row);
   });
 
@@ -444,3 +491,28 @@ document.getElementById("focus-skip").addEventListener("click", () => {
 });
 
 loadTasks();
+/*
+login.addEventListener("click", async (event) => {
+  event.preventDefault();
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+
+  if (!password) return;
+
+  try {
+    const resposta = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    event.target.reset();
+    console.log(resposta);
+  } catch (error) {
+    errorMessage = error.message;
+  }
+  console.log("Deu certo");
+  window.location.href = "/Tarefas_Prototipo.html"
+});
+*/
