@@ -62,20 +62,38 @@ app.get("/api/tarefas", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
+  if (typeof email !== "string" || !email.trim() ||
+      typeof password !== "string" || !password) {
+    return res.status(400).json({ message: "Indique o email e a password." });
+  }
+
   const [users] = await pool.execute(
     "SELECT * FROM users WHERE email = ?",
-    [email]
+    [email.trim()]
   );
-  console.log(users);
   const user = users[0];
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({
       message: "Login inválido"
     });
   }
-  // Guardar o utilizador na sessão
-  req.session.userId = users.id;
-  res.json({ message: "Login efetuado!", user });
+
+  req.session.userId = user.id;
+  req.session.save((error) => {
+    if (error) {
+      console.error("Erro ao guardar sessão de login:", error.message);
+      return res.status(500).json({ message: "Não foi possível iniciar sessão." });
+    }
+
+    res.json({
+      message: "Login efetuado!",
+      user: {
+        id: user.id,
+        name: user.nome_utilizador,
+        email: user.email
+      }
+    });
+  });
 });
 
 app.post("/api/register", async (req, res) => {
@@ -112,7 +130,7 @@ app.get("/api/tarefas/categorias", async (req, res) => {
 
   try {
     const [rows] = await pool.execute(
-      "SELECT DISTINCT divisao FROM tarefas WHERE id_user = ? and divisao IS NOT NULL AND divisao <> '' ORDER BY divisao", [req.session.id]
+      "SELECT DISTINCT divisao FROM tarefas WHERE id_user = ? and divisao IS NOT NULL AND divisao <> '' ORDER BY divisao", [req.session.userId]
     );
     res.json(rows.map((row) => row.divisao));
   } catch (error) {

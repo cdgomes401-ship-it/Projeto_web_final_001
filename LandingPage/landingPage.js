@@ -29,7 +29,11 @@ const openBtn = document.getElementById('openModal');
 const closeBtn = document.getElementById('closeModal');
 const form = document.getElementById('loginForm');
 const pickaxe = document.querySelector('#picareta_imag img');
-const login = document.querySelector('.login-btn');
+const loginButton = form.querySelector('.login-btn');
+const loginStatus = document.createElement('p');
+loginStatus.id = 'login-status';
+loginStatus.setAttribute('role', 'alert');
+form.appendChild(loginStatus);
 
 form.addEventListener('input', (event) => {
   if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
@@ -51,38 +55,28 @@ form.addEventListener('input', (event) => {
       modal.close();
     });
 
-    // Processa os dados quando o formulário é submetido
-    form.addEventListener('submit', (e) => {
-      // Se não quiser usar o comportamento nativo de fechar no submit, 
-      // pode usar e.preventDefault() aqui para validar com AJAX/Fetch.
-      
-      const email = document.getElementById('email').value;
-      console.log('Tentativa de login com:', email);
-      
-      // Opcional: limpa os campos após fechar
-      form.reset();
-    });
-
-login.addEventListener("click", async (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
-
-  if (!password) return;
-
+  loginStatus.textContent = "";
+  loginButton.disabled = true;
   try {
-    const resposta = await fetch("/api/login", {
+    const response = await fetch("/api/login", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: email,
-        password: password
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value
       })
     });
-    event.target.reset();
-    console.log(resposta);
+
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || "Não foi possível iniciar sessão.");
+    }
+
+    window.location.href = "/Tarefas_Prototipo.html";
   } catch (error) {
-    errorMessage = error.message;
+    loginStatus.textContent = error.message || "Erro ao comunicar com o servidor.";
+    loginButton.disabled = false;
   }
-  console.log("Deu certo");
-  window.location.href = "/Tarefas_Prototipo.html"
 });
