@@ -4,16 +4,17 @@ const express = require("express");
 const app = express();
 // definir PORTA
 const PORT = 3000;
- // IMPORTAR BIBLIOTECA PARA TRABALHAR COM SQL
+// IMPORTAR BIBLIOTECA PARA TRABALHAR COM SQL
 const mysql = require("mysql2/promise");
+const fs = require("node:fs/promises");
 // INJETAR VARIAVEIS DE AMBIENTE
 require("dotenv").config();
 // PARA USUARIO
 const bcrypt = require("bcrypt");
-const session =require("express-session");
+const session = require("express-session");
 app.use(session({
   secret: "segredoSuperSecret",
-  resave:false,
+  resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
@@ -27,8 +28,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 
 
-const landingPageDirectory = path.join(__dirname, "..", "LandingPage");
-const frontendDirectory = path.join(__dirname, "..", "Aba_tarefas");
+const landingPageDirectory = path.join(__dirname, "..");
+const frontendDirectory = path.join(__dirname, "..");
 const pool = mysql.createPool({
   host: process.env.DATABASE_HOST,
   port: Number(process.env.DATABASE_PORT) || 3306,
@@ -44,14 +45,22 @@ app.use(express.json());
 app.use(express.static(landingPageDirectory));
 app.use(express.static(frontendDirectory));
 
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ msg: "Faça login para aceder às tarefas." });
+  }
+  next();
+}
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(landingPageDirectory, "landingPage.html")); /*Tarefas_Prototipo.html"));*/
 });
 
-app.get("/api/tarefas", async (req, res) => {
+app.get("/api/tarefas", requireAuth, async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      "SELECT id, tarefa AS text, divisao AS cat, concluido AS done, prioridade, nivel_energia, tempo_estimado_min FROM tarefas ORDER BY id"
+      "SELECT id, tarefa AS text, divisao AS cat, concluido AS done, prioridade, nivel_energia, tempo_estimado_min FROM tarefas WHERE id_user = ? ORDER BY id",
+      [req.session.userId]
     );
     res.json(rows.map((task) => ({ ...task, done: Boolean(task.done) })));
   } catch (error) {
@@ -62,57 +71,102 @@ app.get("/api/tarefas", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
-  const [users] = await pool.execute(
-    "SELECT * FROM users WHERE email = ?",
-    [email]
-  );
-  console.log(users);
-  const user = users[0];
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({
-      message: "Login inválido"
-    });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Indique o email e a palavra-passe." });
   }
-  // Guardar o utilizador na sessão
-  req.session.userId = users.id;
-  res.json({ message: "Login efetuado!", user });
+
+  try {
+    const [users] = await pool.execute(
+      "SELECT id, password, nome_utilizador FROM users WHERE email = ?",
+      [email]
+    );
+    console.log(users);
+    const user = users[0];
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: "Login inválido" });
+    }
+
+    req.session.userId = user.id;
+    res.json({ message: "Login efetuado!" });
+  } catch (error) {
+    console.error("Erro ao iniciar sessão:", error.message);
+    res.status(500).json({ message: "Não foi possível iniciar sessão." });
+  }
 });
 
 app.post("/api/register", async (req, res) => {
-  const { name, email, password } = req.body;
-  // Verificar se os campos foram preenchidos
-  if (!name || !email || !password) {
+  const { name: nameInput, email: emailInput, password } = req.body || {};
+  const name = typeof nameInput === "string" ? nameInput.trim() : "";
+  const email = typeof emailInput === "string" ? emailInput.trim().toLowerCase() : "";
+  /*if (
+    !name ||
+    name.length > 50 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+    email.length > 50 ||
+    typeof password !== "string" ||
+    !password
+  ) {
     return res.status(400).json({
       message: "Preenche todos os campos"
     });
-  }
-  // Verificar se o email já existe
-  const [users] = await pool.execute(
-    "SELECT * FROM users WHERE email = ?",
-    [email]
-  );
-  if (users.length > 0) {
-    return res.status(409).json({
-      message: "Email já registado"
+  }*/
+
+  let connection;
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    const initialTasksSql = await fs.readFile(
+      path.join(__dirname, "tarefas_iniciais.sql"),
+      "utf8"
+    );
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+    const [result] = await connection.execute(
+      "INSERT INTO users (nome_utilizador, email, password) VALUES (?, ?, ?)",
+      [name, email, hash]
+    );
+    await connection.execute("SET @id_user = ?", [result.insertId]);
+
+    const statements = initialTasksSql
+      .split(";")
+      .map((sql) => sql.trim())
+      .filter(Boolean);
+    for (const statement of statements) {
+      await connection.query(statement);
+    }
+
+    await connection.commit();
+    req.session.userId = result.insertId;
+    res.status(201).json({
+      message: "Utilizador registado com sucesso!"
     });
+  } catch (error) {
+    if (connection) {
+      try {
+        await connection.rollback();
+      } catch (rollbackError) {
+        console.error("Erro ao reverter o registo:", rollbackError.message);
+      }
+    }
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(409).json({ message: "Email ou nome de utilizador já registado." });
+    }
+    console.error("Erro ao registar utilizador e tarefas iniciais:", error.message);
+    res.status(500).json({ message: "Não foi possível concluir o registo." });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
   }
-  // Proteger a password
-  const hash = await bcrypt.hash(password, 10);
-  // Inserir utilizador na base de dados
-  await pool.execute(
-    "INSERT INTO users (nome_utilizador, email, password) VALUES (?, ?, ?)",
-    [name, email, hash]
-  );
-  res.status(201).json({
-    message: "Utilizador registado com sucesso!"
-  });
 });
 
-app.get("/api/tarefas/categorias", async (req, res) => {
+
+app.get("/api/tarefas/categorias", requireAuth, async (req, res) => {
 
   try {
     const [rows] = await pool.execute(
-      "SELECT DISTINCT divisao FROM tarefas WHERE id_user = ? and divisao IS NOT NULL AND divisao <> '' ORDER BY divisao", [req.session.id]
+      "SELECT DISTINCT divisao FROM tarefas WHERE id_user = ? and divisao IS NOT NULL AND divisao <> '' ORDER BY divisao",
+      [req.session.userId]
     );
     res.json(rows.map((row) => row.divisao));
   } catch (error) {
@@ -121,7 +175,7 @@ app.get("/api/tarefas/categorias", async (req, res) => {
   }
 });
 
-app.post("/api/tarefas", async (req, res) => {
+app.post("/api/tarefas", requireAuth, async (req, res) => {
   const { text, cat, prioridade, nivel_energia } = req.body;
 
   if (
@@ -149,8 +203,8 @@ app.post("/api/tarefas", async (req, res) => {
     }
 
     const [result] = await pool.execute(
-      "INSERT INTO tarefas (tarefa, divisao, frequencia, prioridade, tempo_estimado_min, nivel_energia) VALUES (?, ?, 'Não definida', ?, 0, ?)",
-      [text.trim(), cat, prioridade, nivel_energia]
+      "INSERT INTO tarefas (tarefa, divisao, frequencia, prioridade, tempo_estimado_min, nivel_energia, id_user) VALUES (?, ?, 'Não definida', ?, 0, ?, ?)",
+      [text.trim(), cat, prioridade, nivel_energia, req.session.userId]
     );
     res.status(201).json({
       id: result.insertId,
@@ -166,7 +220,7 @@ app.post("/api/tarefas", async (req, res) => {
   }
 });
 
-app.patch("/api/tarefas/:id", async (req, res) => {
+app.patch("/api/tarefas/:id", requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   const fields = [];
   const values = [];
@@ -208,10 +262,13 @@ app.patch("/api/tarefas/:id", async (req, res) => {
   }
 
   try {
-    values.push(id);
-    const [result] = await pool.execute(`UPDATE tarefas SET ${fields.join(", ")} WHERE id = ?`, values);
+    values.push(id, req.session.userId);
+    const [result] = await pool.execute(`UPDATE tarefas SET ${fields.join(", ")} WHERE id = ? AND id_user = ?`, values);
     if (result.affectedRows === 0) {
-      const [rows] = await pool.execute("SELECT id FROM tarefas WHERE id = ?", [id]);
+      const [rows] = await pool.execute(
+        "SELECT id FROM tarefas WHERE id = ? AND id_user = ?",
+        [id, req.session.userId]
+      );
       if (rows.length === 0) {
         return res.status(404).json({ msg: "Tarefa não encontrada." });
       }
@@ -223,7 +280,7 @@ app.patch("/api/tarefas/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/tarefas/:id", async (req, res) => {
+app.delete("/api/tarefas/:id", requireAuth, async (req, res) => {
   const id = Number(req.params.id);
 
   if (!Number.isInteger(id) || id < 1) {
@@ -231,7 +288,10 @@ app.delete("/api/tarefas/:id", async (req, res) => {
   }
 
   try {
-    const [result] = await pool.execute("DELETE FROM tarefas WHERE id = ?", [id]);
+    const [result] = await pool.execute(
+      "DELETE FROM tarefas WHERE id = ? AND id_user = ?",
+      [id, req.session.userId]
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ msg: "Tarefa não encontrada." });
     }
@@ -243,6 +303,7 @@ app.delete("/api/tarefas/:id", async (req, res) => {
 });
 
 async function start() {
+  await pool.execute("ALTER TABLE users MODIFY COLUMN password VARCHAR(255) NOT NULL");
   await pool.execute(`
     CREATE TABLE IF NOT EXISTS tarefas (
       id INT AUTO_INCREMENT PRIMARY KEY,

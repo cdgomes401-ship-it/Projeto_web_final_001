@@ -4,16 +4,16 @@ const express = require("express");
 const app = express();
 // definir PORTA
 const PORT = 3000;
- // IMPORTAR BIBLIOTECA PARA TRABALHAR COM SQL
+// IMPORTAR BIBLIOTECA PARA TRABALHAR COM SQL
 const mysql = require("mysql2/promise");
 // INJETAR VARIAVEIS DE AMBIENTE
 require("dotenv").config();
 // PARA USUARIO
 const bcrypt = require("bcrypt");
-const session =require("express-session");
+const session = require("express-session");
 app.use(session({
   secret: "segredoSuperSecret",
-  resave:false,
+  resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
@@ -63,7 +63,7 @@ app.get("/api/tarefas", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
   if (typeof email !== "string" || !email.trim() ||
-      typeof password !== "string" || !password) {
+    typeof password !== "string" || !password) {
     return res.status(400).json({ message: "Indique o email e a password." });
   }
 
@@ -121,9 +121,25 @@ app.post("/api/register", async (req, res) => {
     "INSERT INTO users (nome_utilizador, email, password) VALUES (?, ?, ?)",
     [name, email, hash]
   );
+  const user_id = users[0];
+  let sql = "INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min, nivel_energia, concluido, ultima_conclusao) VALUES ?";
+  let values = [
+    ('WC', 'Aspirar chão', 'Semanal', 1, 5, 2, FALSE, NULL,user_id),
+    ('WC', 'Lavar chão', 'Semanal', 1, 8, 2, FALSE, NULL,user_id),
+    ('WC', 'Lavar louças de casa de banho', 'Semanal', 1, 12, 2, FALSE, NULL,user_id),
+    ('WC', 'Colocar lixívia na sanita', 'Semanal', 3, 2, 0, FALSE, NULL,user_id),
+    ('WC', 'Limpar espelhos', 'Semanal', 1, 3, 1, FALSE, NULL,user_id),
+    ('WC', 'Mudar lixo', 'Semanal', 1, 2, 0, FALSE, NULL,user_id),
+    ('WC', 'Trocar areias dos gatos', 'Semanal', 1, 5, 1, FALSE, NULL,user_id),
+    ('WC', 'Substituir tapete e toalhas', 'Semanal', 1, 2, 0, FALSE, NULL,user_id),
+    ('WC', 'Limpar piaçaba e pousador', 'Semanal', 1, 2, 1, FALSE, NULL,user_id)
+  ];
+  await pool.execute(sql, values);
+console.log(values);
   res.status(201).json({
     message: "Utilizador registado com sucesso!"
   });
+
 });
 
 app.get("/api/tarefas/categorias", async (req, res) => {

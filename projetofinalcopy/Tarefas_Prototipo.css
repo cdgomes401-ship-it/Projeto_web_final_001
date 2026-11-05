@@ -256,12 +256,27 @@ nav a:hover {
     gap:6px;
   }
 
+  .task-field-group{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    flex:0 0 130px;
+  }
+
+  .task-field-label{
+    color: #fff8ea;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
   .task-field{
-    max-width: 150px;
+    width: 100%;
     font: inherit;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--ink);
-    padding: 5px;
+    padding: 5px 4px;
     border: 1px solid var(--wood-dark);
     border-radius: var(--radius);
     background: var(--cream);
@@ -447,5 +462,5 @@ nav a:hover {
     .add-row{ grid-template-columns: minmax(0, 1fr); }
     .add-row input, .add-row button{ grid-column: auto; }
     .item-frame{ gap:8px; padding: 10px; }
-    .task-field{ max-width: 125px; }
+    .task-field-group{ flex-basis: 110px; }
   }

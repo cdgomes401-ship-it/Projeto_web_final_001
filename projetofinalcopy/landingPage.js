@@ -10,6 +10,7 @@ function updateCloudPosition() {
     nuvem.style.setProperty("--cloud-shift", horizontalShift);
   });
 
+
   updatePending = false;
 }
 
@@ -50,14 +51,26 @@ form.addEventListener('input', (event) => {
       modal.close();
     });
 
-    // Processa os dados quando o formulário é submetido
-    form.addEventListener('submit', (e) => {
-      // Se não quiser usar o comportamento nativo de fechar no submit, 
-      // pode usar e.preventDefault() aqui para validar com AJAX/Fetch.
-      
-      const email = document.getElementById('email').value;
-      console.log('Tentativa de login com:', email);
-      
-      // Opcional: limpa os campos após fechar
-      form.reset();
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      })
     });
+
+    const body = await response.json();
+    if (!response.ok) {
+      throw new Error(body.message || "Não foi possível iniciar sessão.");
+    }
+
+    window.location.href = "/Tarefas_Prototipo.html";
+  } catch (error) {
+    window.alert(error.message);
+  }
+});

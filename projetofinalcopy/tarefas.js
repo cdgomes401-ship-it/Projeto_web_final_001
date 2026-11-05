@@ -26,52 +26,6 @@ async function requestTasks(path = "", options = {}) {
   return body;
 }
 
-// ---------------------------------------
-/*
-const modal = document.getElementById('loginModal');
-const openBtn = document.getElementById('openModal');
-const closeBtn = document.getElementById('closeModal');
-const form = document.getElementById('loginForm');
-const pickaxe = document.querySelector('#picareta_imag img');
-
-
-
-
-
-form.addEventListener('input', (event) => {
-  if (!(event.target instanceof HTMLInputElement) || event.target.type === 'checkbox') {
-    return;
-  }
-
-  pickaxe.classList.remove('swing');
-  void pickaxe.offsetWidth;
-  pickaxe.classList.add('swing');
-});
-
-// Abre o modal como uma janela sobreposta (com o fundo escuro)
-openBtn.addEventListener('click', () => {
-  modal.showModal();
-});
-
-// Fecha o modal ao clicar em Cancelar
-closeBtn.addEventListener('click', () => {
-  modal.close();
-});
-
-// Processa os dados quando o formulário é submetido
-form.addEventListener('submit', (e) => {
-  // Se não quiser usar o comportamento nativo de fechar no submit, 
-  // pode usar e.preventDefault() aqui para validar com AJAX/Fetch.
-
-  const email = document.getElementById('email').value;
-  console.log('Tentativa de login com:', email);
-
-  // Opcional: limpa os campos após fechar
-  form.reset();
-});
-
-*/
-// ---------------------------------------
 
 async function loadTasks() {
   try {
@@ -184,9 +138,9 @@ function render() {
 
     const priority = document.createElement("select");
     priority.className = "task-field";
+    priority.id = `task-priority-${task.id}`;
     priority.dataset.id = task.id;
     priority.dataset.field = "prioridade";
-    priority.setAttribute("aria-label", `Prioridade de ${task.text}`);
     [
       [1, "1 - Muito alta"],
       [2, "2 - Alta"],
@@ -202,9 +156,9 @@ function render() {
 
     const energy = document.createElement("select");
     energy.className = "task-field";
+    energy.id = `task-energy-${task.id}`;
     energy.dataset.id = task.id;
     energy.dataset.field = "nivel_energia";
-    energy.setAttribute("aria-label", `Nível de energia de ${task.text}`);
     [
       [0, "0 - Muito baixa"],
       [1, "1 - Baixa"],
@@ -232,12 +186,24 @@ function render() {
     remove.setAttribute("aria-label", "Remover tarefa");
     remove.textContent = "✕";
 
-    priority_auxi = document.createElement("div");
-    priority_auxi.style.flex = "0";
-    priority_auxi.append("Prioridade", priority);
+    const priorityGroup = document.createElement("div");
+    priorityGroup.className = "task-field-group";
+    const priorityLabel = document.createElement("label");
+    priorityLabel.className = "task-field-label";
+    priorityLabel.htmlFor = priority.id;
+    priorityLabel.textContent = "Prioridade";
+    priorityGroup.append(priorityLabel, priority);
+
+    const energyGroup = document.createElement("div");
+    energyGroup.className = "task-field-group";
+    const energyLabel = document.createElement("label");
+    energyLabel.className = "task-field-label";
+    energyLabel.htmlFor = energy.id;
+    energyLabel.textContent = "Energia";
+    energyGroup.append(energyLabel, energy);
 
     details.append(text, estimatedTime);
-    row.append(check, details, category, priority_auxi, energy, timerButton, remove);
+    row.append(check, details, category, priorityGroup, energyGroup, timerButton, remove);
     listEl.appendChild(row);
   });
 

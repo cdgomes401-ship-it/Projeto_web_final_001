@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_utilizador VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL 
+    password VARCHAR(255) NOT NULL
 );
 
 -- Tabela única: a divisão da casa passa a ser uma coluna
@@ -253,4 +253,3 @@ INSERT INTO tarefas (divisao, tarefa, frequencia, prioridade, tempo_estimado_min
 ('Piscina', 'Limpar o pré-filtro da bomba na casa das máquinas', 'Mensal', 2, 10, 1, FALSE, NULL),
 ('Piscina', 'Lavar a cobertura/lona da piscina', 'Trimestral', 4, 30, 2, FALSE, NULL),
 ('Piscina', 'Preparar a piscina para o inverno (invernar) ou abrir para o verão', 'Anual', 4, 120, 3, FALSE, NULL);
-
