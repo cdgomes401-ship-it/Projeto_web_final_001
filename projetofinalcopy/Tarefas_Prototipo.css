@@ -1,4 +1,7 @@
-  :root{
+ @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;500;700;900&display=swap');
+
+ 
+ :root{
     --cream: #EFEBDC;
     --panel: #E4E0CB;
     --sage: #93AA82;
@@ -35,12 +38,22 @@
     border-bottom: 5px solid #6d4429;
 }
 
+#frase {
+    font-size: 13px;
+    color: #dfead7;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: #69ad3a;
+    border-radius: 5px;
+    font-family: 'Press Start 2P', monospace;
+}
+
 #batata {
     display: flex;
     align-items:center;
     justify-content: center;
     gap: 30px;
-    margin: 0 auto;
+    margin-bottom: 20px;
 }
 
 #batata a {
@@ -49,23 +62,33 @@
     text-decoration: none;
 }
 
-nav a:hover {
+#batata a:hover {
     color: #9ec955;
 }
-.Sign_up {
+
+#sidebar {
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 50px;
+}
+#sidebar a {
     border: 0;
     padding: 13px 18px;
     background: #69ad3a;
     color: white;
-    font-family: var(--pixel-font);
+    font-family: 'Press Start 2P', monospace;
     font-size: 10px;
+    text-decoration: none;
     cursor: pointer;
     box-shadow: inset -3px -3px #407d14, inset 3px 3px #a4cf5e;
 }
 
-.Sign_up:hover {
+#sidebar a:hover {
     background: #8cbd42;
 }
+
+
 
   header{
     background: var(--sage);
