@@ -1,9 +1,9 @@
 -------Por fazer e distribuir:------
-Centralizar janela de registo
-msg erro email já registado
-colocar parte de adicionar tarefa no fim da página
-configurar css dos links laterais
-adicionar ver só as não feitas
+Centralizar janela de registo João
+msg erro email já registado Carlos
+colocar parte de adicionar tarefa no fim da página Arthur
+configurar css dos links laterais João
+salvar data de conclusão Carlos
 
 --- Frontend ----
 
