@@ -427,7 +427,7 @@ function renderFocus() {
   focusActions.style.display = "flex";
 }
 
-document.getElementById("focus-btn").addEventListener("click", () => {
+/* document.getElementById("focus-btn").addEventListener("click", () => {
   renderFocus();
   overlay.classList.remove("hidden");
 });
@@ -461,7 +461,7 @@ document.getElementById("focus-skip").addEventListener("click", () => {
   tasks = tasks.filter((item) => item.id !== task.id);
   tasks.push(task);
   renderFocus();
-});
+}); */
 
 loadTasks();
 /*
