@@ -134,7 +134,7 @@ Abra a página inicial no navegador:
 http://localhost:3000/
 ```
 
-Para criar uma conta selecione o botao Sign Up, reencha o nome de utilizador, o email, a password e a confirmação da password. Após o registo, a aplicação inicia a sessão e abre a página de tarefas.
+Para criar uma conta selecione o botao Sign Up e clique no link para registar. Preencha o nome de utilizador, o email, a password e a confirmação da password. Após o registo, a aplicação inicia a sessão e abre a página de tarefas.
 
 Para iniciar sessão numa conta existente, use o formulário de login na página inicial. Também pode abrir a página de tarefas após iniciar sessão:
 
