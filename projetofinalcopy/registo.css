@@ -129,6 +129,11 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
+.card-wrap {
+    margin: 0 auto;
+
+}
+
 /* tremor do cartão quando o login falha (ainda não usado no JS) */
 .card.shake {
     animation: card-shake 0.4s;
@@ -244,28 +249,8 @@ nav a:hover {
     color: #ffffff;
 }
 
-.form-error,
-.form-message {
-    margin: 0 0 14px;
-    color: #fff;
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 1.5;
-}
-
-.form-error,
-.form-message.error {
-    color: #ffe0d8;
-}
-
-.login-btn:disabled {
-    cursor: wait;
-    opacity: 0.75;
-}
-
-/* ========================================================================== 
-   7. ADAPTABILIDADE (media queries) — sempre no fim
+/* ==========================================================================
+   7. ADAPTABILIDADE (media queries)
    ========================================================================== */
 
 @media (max-width: 800px) {
