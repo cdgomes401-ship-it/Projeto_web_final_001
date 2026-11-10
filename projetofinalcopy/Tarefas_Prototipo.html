@@ -31,7 +31,7 @@
       <nav style=" color: #dfead7;
     font-size: 13px;
     text-decoration: none; gap: 30px ">
-        <a href=#task_input>Adicionar tarefa</a>
+        <a href="#form-nova-tarefa">Adicionar tarefa</a>
         <a href="calendario.html">Calendário</a>
       </nav>
     </div>
@@ -50,8 +50,12 @@
         Mostrar apenas tarefas feitas
       </label>
 
-      <form class="add-row" id="add-form">
-        <input type="text" id="task-input" placeholder="Nova tarefa, ex: regar as plantas" required>
+      <div class="task-list" id="task-list"></div>
+
+      <button class="focus-btn" id="focus-btn">▶ Modo foco</button>
+
+      <form class="add-row" id="form-nova-tarefa">
+        <input type="text" id="input-nova-tarefa" placeholder="Nova tarefa, ex: regar as plantas" required>
         <select id="cat-input" aria-label="Categoria da tarefa" required></select>
         <select id="priority-input" aria-label="Prioridade da tarefa" required>
           <option value="" selected disabled>Prioridade</option>
@@ -69,10 +73,6 @@
         </select>
         <button type="submit">Add</button>
       </form>
-
-      <div class="task-list" id="task-list"></div>
-
-      <button class="focus-btn" id="focus-btn">▶ Modo foco</button>
     </div>
   </main>
 
