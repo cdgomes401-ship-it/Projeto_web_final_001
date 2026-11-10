@@ -233,6 +233,9 @@ app.patch("/api/tarefas/:id", requireAuth, async (req, res) => {
     if (typeof done !== "boolean") {
       return res.status(400).json({ msg: "Indique um estado válido." });
     }
+    if (done) {
+      fields.push("ultima_conclusao = IF(concluido = FALSE, CURRENT_DATE(), ultima_conclusao)");
+    }
     fields.push("concluido = ?");
     values.push(done);
   }
