@@ -1,4 +1,10 @@
 -------Por fazer e distribuir:------
+Centralizar janela de registo
+msg erro email já registado
+colocar parte de adicionar tarefa no fim da página
+configurar css dos links laterais
+adicionar ver só as não feitas
+
 --- Frontend ----
 
 Relacionar o formulário

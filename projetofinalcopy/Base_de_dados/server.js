@@ -98,7 +98,7 @@ app.post("/api/register", async (req, res) => {
   const { name: nameInput, email: emailInput, password } = req.body || {};
   const name = typeof nameInput === "string" ? nameInput.trim() : "";
   const email = typeof emailInput === "string" ? emailInput.trim().toLowerCase() : "";
-  /*if (
+  if (
     !name ||
     name.length > 50 ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
@@ -109,7 +109,7 @@ app.post("/api/register", async (req, res) => {
     return res.status(400).json({
       message: "Preenche todos os campos"
     });
-  }*/
+  }
 
   let connection;
   try {
