@@ -129,6 +129,11 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
+.card-wrap {
+    margin: 0 auto;
+
+}
+
 /* tremor do cartão quando o login falha (ainda não usado no JS) */
 .card.shake {
     animation: card-shake 0.4s;
@@ -245,7 +250,7 @@ nav a:hover {
 }
 
 /* ==========================================================================
-   7. ADAPTABILIDADE (media queries) — sempre no fim
+   7. ADAPTABILIDADE (media queries)
    ========================================================================== */
 
 @media (max-width: 800px) {

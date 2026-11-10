@@ -1,4 +1,6 @@
-  :root{
+ @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;500;700;900&display=swap');
+ 
+ :root{
     --cream: #EFEBDC;
     --panel: #E4E0CB;
     --sage: #93AA82;
@@ -49,10 +51,33 @@
     text-decoration: none;
 }
 
-nav a:hover {
+#batata a:hover {
     color: #9ec955;
 }
-.Sign_up {
+
+#sidebar {
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 50px;
+}
+#sidebar a {
+    border: 0;
+    padding: 13px 18px;
+    background: #69ad3a;
+    color: white;
+    font-family: var(--pixel-font);
+    font-size: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: inset -3px -3px #407d14, inset 3px 3px #a4cf5e;
+}
+
+#sidebar a:hover {
+    background: #8cbd42;
+}
+
+.Sign_up  {
     border: 0;
     padding: 13px 18px;
     background: #69ad3a;
@@ -63,7 +88,7 @@ nav a:hover {
     box-shadow: inset -3px -3px #407d14, inset 3px 3px #a4cf5e;
 }
 
-.Sign_up:hover {
+.Sign_up:hover  {
     background: #8cbd42;
 }
 
