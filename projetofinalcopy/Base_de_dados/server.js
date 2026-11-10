@@ -149,7 +149,7 @@ app.post("/api/register", async (req, res) => {
       }
     }
     if (error.code === "ER_DUP_ENTRY") {
-      return res.status(409).json({ message: "Email ou nome de utilizador já registado." });
+      return res.status(409).json({ message: "Email já registado." });
     }
     console.error("Erro ao registar utilizador e tarefas iniciais:", error.message);
     res.status(500).json({ message: "Não foi possível concluir o registo." });
