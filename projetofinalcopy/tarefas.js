@@ -373,9 +373,16 @@ document.getElementById("cat-filters").addEventListener("click", (event) => {
 
 document.getElementById("completed-only").addEventListener("change", render);
 
-document.getElementById("add-form").addEventListener("submit", async (event) => {
+document.querySelector('a[href="#form-nova-tarefa"]').addEventListener("click", (event) => {
   event.preventDefault();
-  const input = document.getElementById("task-input");
+  const form = document.getElementById("form-nova-tarefa");
+  form.scrollIntoView({ behavior: "smooth", block: "end" });
+  document.getElementById("input-nova-tarefa").focus({ preventScroll: true });
+});
+
+document.getElementById("form-nova-tarefa").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const input = document.getElementById("input-nova-tarefa");
   const category = document.getElementById("cat-input");
   const priority = document.getElementById("priority-input");
   const energy = document.getElementById("energy-input");
