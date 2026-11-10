@@ -38,7 +38,6 @@ Versões identificadas nos ficheiros de dependências e no ambiente de desenvolv
 | nodemon | 3.1.14 |
 | MySQL Server | Registar a versão instalada antes da entrega |
 
-As versões dos pacotes Node.js estão fixadas no ficheiro `Base_de_dados/package-lock.json`. O repositório não contém resultados de testes de integração com uma versão específica do MySQL. Confirme e registe essa versão no ambiente onde executar os testes.
 
 ## Requisitos
 
@@ -135,19 +134,10 @@ Abra a página inicial no navegador:
 http://localhost:3000/
 ```
 
-Para criar uma conta, abra:
-
-```text
-http://localhost:3000/registo.html
-```
-
-Preencha o nome de utilizador, o email, a password e a confirmação da password. Após o registo, a aplicação inicia a sessão e abre a página de tarefas.
+Para criar uma conta selecione o botao Sign Up, reencha o nome de utilizador, o email, a password e a confirmação da password. Após o registo, a aplicação inicia a sessão e abre a página de tarefas.
 
 Para iniciar sessão numa conta existente, use o formulário de login na página inicial. Também pode abrir a página de tarefas após iniciar sessão:
 
-```text
-http://localhost:3000/Tarefas_Prototipo.html
-```
 
 Use sempre os endereços `http://localhost:3000`. Não abra os ficheiros HTML diretamente pelo Explorador de Ficheiros. Não use a extensão Live Server para esta aplicação. Esses métodos não passam pelo backend Express e não usam a sessão da aplicação.
 
@@ -234,8 +224,4 @@ O `package.json` não define testes automatizados. Registe os resultados dos tes
 | A porta `3000` já está em uso | Pare o outro servidor que usa a porta ou altere a porta no código. |
 | O PowerShell bloqueia `npm` | Execute os comandos com `npm.cmd`. |
 
-## Autoria e apoio
 
-Identifique os recursos externos usados no projeto, como imagens, templates, tutoriais e bibliotecas.
-
-Foi usada assistência de inteligência artificial para rever o fluxo de registo, a associação das tarefas ao utilizador, os rótulos dos campos de tarefa e este README. Compare as instruções com os ficheiros do projeto. Execute os testes descritos neste documento antes da entrega. Todos os autores devem conseguir explicar e alterar o código entregue.
